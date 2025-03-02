@@ -9,7 +9,7 @@ export const checkAuth = async (req, res, next) =>  {
         })
     }
     try {
-        const decodeed = jwt.verify(token, "123456");
+        const decodeed = jwt.verify(token, process.env.JWT_SECERT_KEY);
         if(!decodeed){
             return res.status(401).json({
                 message: "token khong hop le"

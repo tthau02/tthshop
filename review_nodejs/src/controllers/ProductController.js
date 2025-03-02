@@ -1,10 +1,14 @@
 import Joi from "joi";
 import Product from "../models/product";
 
-const productSchema = Joi.object ({
-    id: Joi.number().optional(),
-    name: Joi.string().required().min(3).trim(),
-    price: Joi.number().required().positive()
+const productsSchema = Joi.object({
+    name: Joi.string().min(3).required(),
+    price: Joi.number().required(),
+    thumbnail: Joi.string().optional(),
+    brand: Joi.string().optional(),
+    category: Joi.string().optional(),
+    description: Joi.string().optional(),
+    categoryId: Joi.string().required(),
 })
 
 
@@ -32,7 +36,7 @@ export const getProductByID = async (req, res) => {
 
 export const createProduct = async (req, res) => {
     try {
-        const {error, value} = productSchema.validate(req.body, {
+        const {error, value} = productsSchema.validate(req.body, {
             abortEarly: false
         })
         if(error) {
@@ -54,7 +58,7 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        const {error, value} = productSchema.validate(req.body, {
+        const {error, value} = productsSchema.validate(req.body, {
             abortEarly: false
         })
         if(error) {

@@ -70,7 +70,7 @@ export const signin = async (req, res) => {
                 message: "password sai"
             })
         }
-        const token = jwt.sign({id: user._id}, "123456", {expiresIn: "1h"});
+        const token = jwt.sign({id: user._id}, process.env.JWT_SECERT_KEY, {expiresIn: "1h"});
         user.password = undefined;
         return res.status(200).json({
             message: "dang nhap thanh cong",

@@ -4,19 +4,30 @@ const productSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            min: 3,
-            required: true
+            required: true,
+            minLength: 3,
         },
         price: {
             type: Number,
-            required: true
-        }
+            required: true,
+        },
+        thumbnail: {
+            type: String,
+        },
+        brand: {
+            type: String,
+        },
+        description: {
+            type: String,
+        },
+        categoryId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category",
+            required: true,
+        },
     },
-    {
-        timestamps: true,
-        versionKey: false
-    }
-)
+    { versionKey: false, timestamps: true }
+);
 
 productSchema.plugin(mongoosePaginate);
 export default mongoose.model("Product", productSchema);
