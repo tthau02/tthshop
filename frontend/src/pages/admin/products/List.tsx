@@ -15,10 +15,10 @@ const List = () => {
       getAllProducts();
   }, [])
 
-  const removeProduct = async (_id: number) => {
+  const removeProduct = async (_id: string) => {
     if(confirm("Bạn muốn xóa sản phẩm này không")){
       await instance.delete(`products/${_id}`);
-      setProducts(products.filter((item) => item._id != id));
+      setProducts(products.filter((item) => item._id !== _id));
       toast.success("Xóa thành công")
     }
   }
@@ -43,7 +43,6 @@ const List = () => {
               <th className="py-3 px-4">Product Name</th>
               <th className="py-3 px-4">Image</th>
               <th className="py-3 px-4">Price</th>
-              <th className="py-3">Description</th>
               <th className="py-3">Category</th>
               <th className="py-3 px-4">Brand</th>
               <th className="py-3 px-4">Actions</th>
@@ -51,16 +50,15 @@ const List = () => {
           </thead>
           <tbody>
             
-            {products.map((item) => (
+            {products.map((item, index) => (
             <tr className="border-t">
-              <td className="py-3 px-4">{item._id}</td>
+              <td className="py-3 px-4">{index + 1}</td>
               <td className="py-3 px-4">{item.name}</td>
               <td className="py-3 px-4 w-[150px] h-[150px]">
                   <img src={item.thumbnail} alt={item.title} />
               </td>
               <td className="py-3 px-4">{item.price}$</td>
-              <td className="py-3">{item.description}</td>
-              <td className="py-3">{item.category}</td>
+              <td className="py-3">{item.categoryId?.categoryName}</td>
               <td className="py-3 px-4">
               {/* <span className='text-white p-2 text-[14px] bg-red-500 rounded-lg'>Còn Hàng </span>  */}
               {item.brand}

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react"
 import IProduct from "../interfaces/products"
 import { useParams } from "react-router-dom";
+import instance from "../config/axiosConfig";
 
 const ProductDetail = () => {
   
-    const [ product, setProduct ] = useState<IProduct>([]);
+    const [ product, setProduct ] = useState<IProduct[]>([]);
     const { id } = useParams();
     useEffect(() => {
         const getProduct = async () => {
            try {
-            const res = await fetch(`http://localhost:3000/products/${id}`);
-            const data = await res.json();
+            const {data} = await instance(`/products/${id}`)
             setProduct(data);
            } catch (error) {
             console.log(error);
@@ -28,7 +28,7 @@ const ProductDetail = () => {
             {/* Phần thông tin chi tiết sản phẩm */}
             <section className="flex flex-col justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">{product.title}</h1>
+                    <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
                     <p className="text-xl text-red-500 mt-2">Giá: {product.price}₫</p>
                     <p className="mt-4 text-gray-600">
                         {product.description}

@@ -4,10 +4,14 @@ import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import instance from '../../../config/axiosConfig'
+import { useEffect, useState } from 'react'
+import { ICategory } from '../../../interfaces/category'
 
 const Add = () => {
     const navigate = useNavigate();
     const {register, handleSubmit, formState:{errors}} = useForm<ProductInput>()
+    const [categories, setCategories] = useState<ICategory[]>([])
+
     const onSubmit = async (data: ProductInput) => {
       try {
   
@@ -18,6 +22,14 @@ const Add = () => {
           toast.error((error as AxiosError).message);
       }
   };
+
+  useEffect(() => {
+    const fechCategory = async () => {
+      const {data} = await instance.get(`/categores`);
+      setCategories(data);
+    }
+    fechCategory()
+  }, [])
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 p-6">
       <header className="mb-6">
@@ -108,13 +120,17 @@ const Add = () => {
 
         <div className="mb-6">
             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Category</label>
-            <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            {...register('category')}
+            <select
+                id="category"
+                {...register("categoryId", { required: true })}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             >
-                <option selected>Chọn danh mục</option>
-                <option value={'laptops'}>laptops</option>
-                <option value={'smartphones'}>smartphones</option>
-                <option value={'skincare'}>skincare</option>
+                <option value="">Chọn danh mục</option>
+                {categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                        {category.categoryName}
+                    </option>
+                ))}
             </select>
         </div>
           <div className="mb-4">

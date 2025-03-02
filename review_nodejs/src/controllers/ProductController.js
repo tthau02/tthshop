@@ -14,7 +14,7 @@ const productsSchema = Joi.object({
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate("categoryId", "categoryName");
         return res.status(200).json(products);
     } catch (error) {
         return res.status(400).json({
@@ -45,7 +45,7 @@ export const createProduct = async (req, res) => {
         }
 
         const newProduct = await Product.create(value);
-        return res.status(400).json({
+        return res.status(201).json({
             message: "them moi thanh cong",
             newProduct
         })

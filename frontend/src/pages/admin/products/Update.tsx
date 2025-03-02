@@ -3,13 +3,15 @@ import toast from 'react-hot-toast'
 import { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import instance from '../../../config/axiosConfig'
+import { ICategory } from '../../../interfaces/category'
 
 const Update = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const {register, handleSubmit, formState:{errors}, reset} = useForm<ProductInput>()
+    const [categories, setCategories] = useState<ICategory[]>([])
     useEffect(() => {
         const getById = async () => {
           const res = await instance.get(`/products/${id}`);
@@ -17,19 +19,30 @@ const Update = () => {
         }
         getById();
     }, [id, reset])
-    const onSubmit = async (data:ProductInput) =>{
-        try {
-          await instance.put(`/products/${id}`,data);
-          toast.success("Cập nhật thành công")
-          navigate("/admin/products")
-        } catch (error) {
-          toast.error((error as AxiosError).message)
-        }
+    const onSubmit = async (data: ProductInput) => {
+      try {
+          // Loại bỏ các trường không hợp lệ trước khi gửi
+          const { _id, createdAt, updatedAt, ...validData } = data;
+  
+          await instance.put(`/products/${id}`, validData);
+          toast.success("Cập nhật thành công");
+          navigate("/admin/products");
+      } catch (error) {
+          toast.error((error as AxiosError).message);
       }
+  };
+  
+      useEffect(() => {
+        const fechCategory = async () => {
+          const {data} = await instance.get(`/categores`);
+          setCategories(data);
+        }
+        fechCategory()
+      }, [])
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 p-6">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Add New Product</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Update Product</h1>
       </header>
       <div className="bg-white shadow-lg rounded-lg p-6 ">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -130,13 +143,17 @@ const Update = () => {
           </div>
         <div className="mb-6">
             <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Category</label>
-            <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            {...register('category')}
+            <select
+                id="category"
+                {...register("categoryId", { required: true })}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             >
-                <option selected>Chọn danh mục</option>
-                <option value={'laptops'}>laptops</option>
-                <option value={'smartphones'}>smartphones</option>
-                <option value={'skincare'}>skincare</option>
+                <option value="">Chọn danh mục</option>
+                {categories.map((cate) => (
+                    <option key={cate._id} value={cate._id}>
+                        {cate.categoryName}
+                    </option>
+                ))}
             </select>
         </div>
           <div className="mb-4">

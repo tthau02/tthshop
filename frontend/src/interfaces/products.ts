@@ -1,10 +1,9 @@
 interface IProduct {
     _id: string,
-    title: string,
     name: string,
     price: number,
     description: string,
-    category: string,
+    categoryId: string,
     thumbnail: string,
     rating: number
     brand: string

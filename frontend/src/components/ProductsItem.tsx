@@ -3,7 +3,6 @@ import IProduct from "../interfaces/products"
 
 
 const ProductsItem = (props: IProduct) => {
-
   return (
     <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
         <Link to={`/products/${props._id}`}>
@@ -11,7 +10,7 @@ const ProductsItem = (props: IProduct) => {
         </Link>
         <div className="p-4">
             <Link to={`/products/${props._id}`}>
-                <h2 className="text-xl font-semibold text-gray-800 ">{props.title}</h2>
+                <h2 className="text-xl font-semibold text-gray-800 ">{props.name}</h2>
             </Link>
             <p className="mt-2 text-gray-600">
                 Đánh giá: {props.rating}
