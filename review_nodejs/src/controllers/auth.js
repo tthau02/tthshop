@@ -29,7 +29,7 @@ export const signup = async (req, res) => {
         const exitUser = await User.findOne({email: value.email});
         if(exitUser){
             return res.status(400).json({
-                message: "Tai khoan da ton tai"
+                message: "Tài khoản đã tồn tại"
             })
         }
 
@@ -61,13 +61,13 @@ export const signin = async (req, res) => {
         const user = await User.findOne({email: value.email});
         if(!user){
             return res.status(400).json({
-                message: "email khong dung"
+                message: "Email không đúng!"
             })
         }
         const isMathchPassword  = await bcrypt.compare(value.password, user.password);
         if(!isMathchPassword){
             return res.status(400).json({
-                message: "password sai"
+                message: "Sai mật khẩu!"
             })
         }
         const token = jwt.sign({id: user._id}, process.env.JWT_SECERT_KEY, {expiresIn: "1h"});

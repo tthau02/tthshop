@@ -13,6 +13,7 @@ import Login from "./pages/Login"
 import ListCategory from "./pages/admin/category/ListCategory"
 import AddCategory from "./pages/admin/category/AddCategory"
 import UpdateCategory from "./pages/admin/category/UpdateCategory"
+import PrivateRoute from "./components/PrivateRoute"
 
 
 function App() {
@@ -31,14 +32,16 @@ function App() {
           <Route path="login" element = {<Login/>}/>
         </Route>
         
-        <Route path="/admin" element={<AdminLayout/>}>
-          <Route path="products" element={<List />}/> 
-          <Route path="products/add" element={<Add />}/> 
-          <Route path="products/update/:id" element={<Update />}/> 
+        <Route element={<PrivateRoute/>}>
+          <Route path="/admin" element={<AdminLayout/>}>
+            <Route path="products" element={<List />}/> 
+            <Route path="products/add" element={<Add />}/> 
+            <Route path="products/update/:id" element={<Update />}/> 
 
-          <Route path="categores" element={<ListCategory />}/> 
-          <Route path="categores/add" element={<AddCategory />}/> 
-          <Route path="categores/update/:id" element={<UpdateCategory />}/> 
+            <Route path="categores" element={<ListCategory />}/> 
+            <Route path="categores/add" element={<AddCategory />}/> 
+            <Route path="categores/update/:id" element={<UpdateCategory />}/> 
+          </Route>
         </Route>
 
         <Route path="*" element={<h1>Not Fount</h1>} />

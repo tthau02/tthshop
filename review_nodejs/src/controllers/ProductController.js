@@ -12,9 +12,27 @@ const productsSchema = Joi.object({
 })
 
 
+export const getProductsPaginate = async (req, res) => {
+    const { _page, _limit, } = req.query;
+    const options = {
+        page: _page,
+        limit: _limit ? parseInt(_limit) : 10,
+        sort: { createdAt: -1 },
+        populate: { path: 'categoryId', select: 'categoryName' } 
+    };
+    try {
+        const products = await Product.paginate({}, options);
+        return res.status(200).json(products);
+    } catch (error) {
+        return res.status(400).json({
+            message: error.message
+        })
+    }
+}
+
 export const getProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate("categoryId", "categoryName");
+        const products = await Product.find();
         return res.status(200).json(products);
     } catch (error) {
         return res.status(400).json({

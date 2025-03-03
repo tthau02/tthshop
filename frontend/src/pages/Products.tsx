@@ -2,79 +2,110 @@ import { useEffect, useState } from "react";
 import IProduct from "../interfaces/products";
 import ProductsItem from "../components/ProductsItem";
 import instance from "../config/axiosConfig";
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import { ICategory } from "../interfaces/category";
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]); // Danh sách danh mục
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
+  const [priceRange, setPriceRange] = useState<number>(0); // Lọc giá
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState(""); 
-  const productsPerPage = 8;
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 8;
 
   useEffect(() => {
-    const getAllProducts = async () => {
-      const res = await instance.get(`/products?title=${searchTerm}`); 
-      setProducts(res.data);
-    };
-    getAllProducts();
-  }, [searchTerm]); 
+    fetchCategories(); // Lấy danh mục
+    fetchProducts(); // Lấy sản phẩm
+  }, [currentPage, selectedCategory, priceRange]);
 
-  // Tính toán các chỉ số cho phân trang
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const fetchCategories = async () => {
+    const res = await instance.get("/categores");
+    setCategories(res.data);
+  };
 
-  // Tạo mảng số trang
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const fetchProducts = async () => {
+    let query = `/products?_page=${currentPage}&_limit=${limit}`;
+    if (selectedCategory) query += `&category=${selectedCategory}`;
+    if (priceRange > 0) query += `&price_lte=${priceRange}`;
+    const res = await instance.get(query);
+    setProducts(res.data.docs);
+    setTotalPages(res.data.totalPages);
+  };
 
   return (
-    <>
-      <section className='max-w-[1250px] mx-auto m-5 mt-[5%]'>
+    <div className="max-w-[1250px] mx-auto m-5 mt-[5%] flex">
+      {/* Sidebar */}
+      <aside className="w-[250px] p-4 bg-gray-100 rounded-lg">
+        <h4 className="text-lg font-bold text-gray-700 mb-3">Danh mục</h4>
+        <ul>
+          {categories.map((category, index) => (
+            <li
+              key={index}
+              className={`cursor-pointer p-2 rounded-lg ${selectedCategory === category ? "bg-red-500 text-white" : "hover:bg-gray-200"}`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category.categoryName}
+            </li>
+          ))}
+        </ul>
+
+        <h4 className="mt-4 text-lg font-bold text-gray-700 mb-3">Lọc theo giá</h4>
+        <input
+          type="range"
+          min="0"
+          max="1000"
+          value={priceRange}
+          onChange={(e) => setPriceRange(Number(e.target.value))}
+          className="w-full"
+        />
+        <p>Giá tối đa: {priceRange} $</p>
+      </aside>
+
+      {/* Danh sách sản phẩm */}
+      <section className="w-[1000px] pl-6">
         <h4 className="p-2 text-center text-[24px] font-bold text-red-500">
           Tất cả sản phẩm
         </h4>
-        
-        <h4>Tìm kiếm sản phẩm</h4>
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Tìm sản phẩm..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} 
-            className="w-[250px] p-2 border border-gray-300 rounded"
-          />
-          <button className="p-2 bg-red-600 text-white hover:bg-red-800">Search</button>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {currentProducts.map((item: IProduct) => (
+          {products.map((item: IProduct) => (
             <ProductsItem key={item._id} {...item} />
           ))}
         </div>
-      </section>
 
-      {totalPages > 1 && (
-        <div className="p-3 mt-8 mx-auto w-fit">
-          <nav aria-label="Pagination" className="flex items-center space-x-2">
-            {pageNumbers.map((number) => (
-              <button
-                key={number}
-                onClick={() => {
-                  setCurrentPage(number);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className={`px-3 py-1 border border-gray-300 rounded ${
-                  currentPage === number
-                    ? 'bg-red-500 text-white hover:bg-red-600'
-                    : 'hover:bg-gray-200'
-                }`}
+        {/* Phân trang */}
+        <div className="flex justify-center mt-10 mb-10">
+          <nav className="flex items-center space-x-2">
+            <button 
+              className={`px-4 py-2 text-gray-700 bg-slate-200 border border-gray-300 rounded-l ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              <AiFillCaretLeft />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button 
+                key={index + 1}
+                className={`px-3 py-1 border ${currentPage === index + 1 ? "bg-red-500 text-white" : "bg-white text-gray-700 hover:bg-gray-200"}`}
+                onClick={() => setCurrentPage(index + 1)}
               >
-                {number}
+                {index + 1}
               </button>
             ))}
+
+            <button 
+              className={`px-4 py-2 text-gray-700 bg-slate-200 border border-gray-300 rounded-r ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              <AiFillCaretRight />
+            </button>
           </nav>
         </div>
-      )}
-    </>
+      </section>
+    </div>
   );
 };
 

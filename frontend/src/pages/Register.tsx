@@ -14,8 +14,9 @@ const Register = () => {
             await instance.post(`/signup`, data);
             toast.success("Đăng kí thành công")
             navigate("/login");
-        } catch (error) {
-            toast.error(error.response.data)
+        } catch (error: any) {
+          const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại!";
+          toast.error(errorMessage);
         }
     }
   return (

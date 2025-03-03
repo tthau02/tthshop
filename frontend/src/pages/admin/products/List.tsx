@@ -3,14 +3,20 @@ import { Link } from 'react-router-dom'
 import IProduct from '../../../interfaces/products'
 import toast from 'react-hot-toast'
 import instance from '../../../config/axiosConfig'
+import { AxiosError } from 'axios'
 
 const List = () => {
   const [products, setProducts] = useState<IProduct[]>([])
 
   useEffect(() => {
       const getAllProducts = async () => {
-        const res = await instance.get(`/products`);
-        setProducts(res.data)
+        try {
+          const res = await instance.get(`/products?_page=1&_limit=10`);
+          setProducts(res.data.docs)
+        } catch (error) {
+          console.log(error)
+          toast.error((error as AxiosError).message);
+        }
       }
       getAllProducts();
   }, [])

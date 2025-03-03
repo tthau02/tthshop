@@ -1,49 +1,46 @@
+import { useEffect, useState } from "react"
 import BannerSlider from "../components/BannerSlider "
+import IProduct from "../interfaces/products"
+import instance from "../config/axiosConfig";
+import { Link } from "react-router-dom";
+import { ICategory } from "../interfaces/category";
 
 const Home = () => {
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [category, setCategory] = useState<ICategory[]>([]);
+
+  useEffect(() => {
+    getNewProduct();
+    getCategory();
+  }, [])
+
+  const getNewProduct = async () => {
+    const {data} = await instance.get(`/products?_page=1&_limit=8`);
+    setProducts(data.docs);
+  }
+
+  const getCategory = async() => {
+    const {data} = await instance.get(`/categores`);
+    setCategory(data);
+  }
   return (
   <>
     <BannerSlider />
 
     <div className="container max-w-[1300px] mx-auto m-5">
       <h3 className="mb-3 uppercase font-bold text-[16px] text-red-600">Danh Mục Nổi Bật</h3>
-      <div className="flex items-center justify-between">
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
-          <img className="w-full h-48 object-cover " src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">Product Name</h2>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
-          <img className="w-full h-48 object-cover " src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">Product Name</h2>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
-          <img className="w-full h-48 object-cover " src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">Product Name</h2>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
-          <img className="w-full h-48 object-cover " src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">Product Name</h2>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
-          <img className="w-full h-48 object-cover " src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">Product Name</h2>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
-          <img className="w-full h-48 object-cover " src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">Product Name</h2>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+        {category.map((cate) => {
+          return (
+            <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
+              <img className="w-full h-48 object-cover " src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:quality(100)/phone_cate_c6a412f60a.png" alt="Product Image" />
+              <div className="p-4">
+                <h2 className="text-xl font-semibold text-gray-800 text-center">{cate.categoryName}</h2>
+              </div>
+            </div>
+          )
+        })}
+       
       </div>
       <div className="h-[400px] flex items-center justify-center gap-7">
         <div className="relative w-[660px] h-[350px]">
@@ -71,67 +68,28 @@ const Home = () => {
       </div>
   
       <h3 className="mb-3 uppercase font-bold text-[16px] text-red-600">sản phẩm mới nhất</h3>
-      <div className="flex items-center justify-between">
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
-          <img className="w-full h-48 object-cover" src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800 ">Product Name</h2>
-            <p className="mt-2 text-gray-600 text-sm">
-              This is a brief description of the product.
-            </p>
-            <div className="flex items-center justify-between mt-4">
-              <span className="text-lg font-bold text-red-500">$99.99</span>
-              <button className="px-3 py-2 bg-red-500 text-white text-xs font-bold uppercase rounded hover:bg-red-400">
-                Add to Cart
-              </button>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products.map((item) => {
+            return (
+              <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
+              <Link to={`/products/${item._id}`}>
+              <img className="w-full h-48 object-cover" src={item.thumbnail} alt={item.name} />
+              </Link>
+              <div className="p-4">
+                <h2 className="text-xl font-semibold text-gray-800 ">{item.name}</h2>
+                <p className="mt-2 text-gray-600 text-sm">
+                  {item.description}
+                </p>
+                <div className="flex items-center justify-between mt-4">
+                  <span className="text-lg font-bold text-red-500">${item.price}</span>
+                  <button className="px-3 py-2 bg-red-500 text-white text-xs font-bold uppercase rounded hover:bg-red-400">
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden">
-          <img className="w-full h-48 object-cover" src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800">Product Name</h2>
-            <p className="mt-2 text-gray-600 text-sm">
-              This is a brief description of the product.
-            </p>
-            <div className="flex items-center justify-between mt-4">
-              <span className="text-lg font-bold text-red-500">$99.99</span>
-              <button className="px-3 py-2 bg-red-500 text-white text-xs font-bold uppercase rounded hover:bg-red-400">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden">
-          <img className="w-full h-48 object-cover" src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800">Product Name</h2>
-            <p className="mt-2 text-gray-600 text-sm">
-              This is a brief description of the product.
-            </p>
-            <div className="flex items-center justify-between mt-4">
-              <span className="text-lg font-bold text-red-500">$99.99</span>
-              <button className="px-3 py-2 bg-red-500 text-white text-xs font-bold uppercase rounded hover:bg-red-400">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden">
-          <img className="w-full h-48 object-cover" src="https://via.placeholder.com/300" alt="Product Image" />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold text-gray-800">Product Name</h2>
-            <p className="mt-2 text-gray-600 text-sm">
-              This is a brief description of the product.
-            </p>
-            <div className="flex items-center justify-between mt-4">
-              <span className="text-lg font-bold text-red-500">$99.99</span>
-              <button className="px-3 py-2 bg-red-500 text-white text-xs font-bold uppercase rounded hover:bg-red-400">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
+            )
+          })}
       </div>
     </div>
 

@@ -1,23 +1,26 @@
 import { useForm } from "react-hook-form";
 import { ILogin } from "../interfaces/users";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import instance from "../config/axiosConfig";
 
 const Login = () => {
     const { register, handleSubmit, formState: {errors} } = useForm<ILogin>()
     const navigete = useNavigate();
     const onSubmit = async (data: ILogin) => {
         try {
-           const res =  await axios.post(`http://localhost:3000/api/signin`, data);
+           const res =  await instance.post(`/signin`, data);
+           console.log(res.data)
            if(res) {
             localStorage.setItem("token", res.data.accessToken)
+            localStorage.setItem("user", JSON.stringify(res.data.user));
            }
             toast.success("Đăng nhập thành công")
             navigete("/");
         } catch (error: any) {
-            toast.error(error.response.data)
+          const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại!";
+          toast.error(errorMessage);
         }
     }
   return (
