@@ -2,6 +2,9 @@ import User from "../models/user";
 import Joi from "joi";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const signupSchema = Joi.object({
     username: Joi.string().min(3),
@@ -75,7 +78,7 @@ export const signin = async (req, res) => {
         return res.status(200).json({
             message: "dang nhap thanh cong",
             user,
-            token
+            accessToken: token
         })
     } catch (error) {
         return res.status(400).json({
@@ -83,3 +86,37 @@ export const signin = async (req, res) => {
         })
     }
 }
+
+export const googleLogin = async (req, res) => {
+    const { token } = req.body;
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      console.log("Google payload:", payload);
+      const { sub: googleId, email, name } = payload;
+  
+      let user = await User.findOne({email, googleId });
+        if (!user) {
+            user = await User.create({
+            email,
+            username: name,
+            googleId,
+            });
+      }
+  
+      const Jwttoken = jwt.sign({id: user._id}, process.env.JWT_SECERT_KEY, {expiresIn: "1h"});
+      user.password = undefined;
+      return res.status(200).json({
+          message: "dang nhap thanh cong",
+          user,
+          accessToken: Jwttoken
+      })
+    } catch (error) {
+      return res.status(401).json({
+        message: "Đăng nhập bằng Google thất bại",
+      });
+    }
+  };

@@ -19,16 +19,15 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); // Thêm state error
+  const [error, setError] = useState<string | null>(null); 
   const { id } = useParams<{ id: string }>();
   const { fetchCartCount } = useCart();
 
-  // Lấy chi tiết sản phẩm
   useEffect(() => {
     const getProduct = async () => {
       try {
         setLoading(true);
-        setError(null); // Reset lỗi trước khi gọi API
+        setError(null);
         const { data } = await instance.get(`/products/${id}`);
         setProduct(data.product || data);
         setLoading(false);
@@ -88,7 +87,7 @@ const ProductDetail = () => {
   return (
     <div className="container mx-auto p-4 mt-20">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* Image Section */}
+
         <div className="flex flex-col items-center">
           <img
             src={product.thumbnail}
@@ -102,7 +101,6 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Details Section */}
         <div className="space-y-5">
           <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
           <p className="text-2xl text-red-500 font-semibold">{product.price.toLocaleString()}₫</p>
@@ -113,7 +111,6 @@ const ProductDetail = () => {
           <p className="text-gray-600">
             <span className="font-semibold">Còn hàng:</span> {product.quantity}
           </p>
-          {/* Quantity Selector */}
           <div className="flex items-center space-x-4">
             <p className="font-semibold">Số lượng:</p>
             <button
@@ -130,8 +127,6 @@ const ProductDetail = () => {
               +
             </button>
           </div>
-
-          {/* Action Buttons */}
           <div className="flex space-x-4 mt-6">
             <button
               className="flex-1 px-4 py-2 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-600"

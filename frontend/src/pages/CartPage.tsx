@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 import { useCart } from '../CartContext';
 import { Link } from 'react-router-dom';
 
-// Định nghĩa các interface như cũ
 interface Product {
   _id: string;
   name: string;
@@ -39,7 +38,6 @@ const PageCart: React.FC = () => {
   const user = JSON.parse(localStorage.getItem("user") || '{}');
   const userId = user._id;
 
-  // Hàm fetch giỏ hàng
   const fetchCart = async () => {
     try {
       const response = await instance.get<CartResponse>(`/cart/${userId}`);
@@ -55,7 +53,6 @@ const PageCart: React.FC = () => {
     fetchCart();
   }, [userId]);
 
-  // Hàm cập nhật số lượng
   const updateQuantity = async (productId: string, newQuantity: number) => {
     if (newQuantity < 1) {
       toast.error('Số lượng phải lớn hơn 0');
@@ -67,7 +64,7 @@ const PageCart: React.FC = () => {
         productId,
         quantity: newQuantity,
       });
-      fetchCart(); // Cập nhật danh sách giỏ hàng
+      fetchCart(); 
       fetchCartCount(); 
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Không thể cập nhật số lượng');
@@ -192,7 +189,6 @@ const PageCart: React.FC = () => {
             </div>
           ))}
       </div>
-       {/* Tổng cộng */}
        {cartData.totalAmount && (
         <div className="mt-6 text-right">
           <div className="bg-gray-100 p-4 rounded-lg inline-block">

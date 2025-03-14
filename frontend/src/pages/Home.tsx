@@ -72,17 +72,19 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((item) => {
             return (
-              <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out transform hover:scale-105">
+            <div className="border rounded-lg p-4 hover:shadow-lg transition">
               <Link to={`/products/${item._id}`}>
-              <img className="w-full h-48 object-cover" src={item.thumbnail} alt={item.name} />
+              <img className="w-full h-48 object-cover rounded-md mb-3" src={item.thumbnail} alt={item.name} />
               </Link>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-800 ">{item.name}</h3>
+              <div className="p-2">
+                <Link to={`/products/${item._id}`}>
+                  <h3 className="font-semibold text-gray-800 ">{item.name}</h3>
+                </Link>
                 <p className="mt-2 text-gray-600 text-sm">
                   {item.description}
                 </p>
                 <div className="flex items-center justify-between mt-4">
-                  <span className="text-lg font-bold text-red-500">${item.price}</span>
+                  <span className="text-lg font-bold text-red-500">{item.price.toLocaleString()}₫</span>
                   <AddToCart productId={item._id}/>
                 </div>
               </div>

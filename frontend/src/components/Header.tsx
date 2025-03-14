@@ -35,8 +35,8 @@ const Header: React.FC = () => {
     <header className="p-3 bg-black fixed top-0 left-0 w-full z-50">
       <div className="container max-w-[1300px] mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center">
-          <h1 className="text-[30px] uppercase font-bold text-red-600">TH</h1>
-          <span className="text-[30px] font-bold text-orange-400">Shop</span>
+          <h1 className="text-[24px] uppercase font-bold text-red-600">TH</h1>
+          <span className="text-[24px] font-bold text-orange-400">Shop</span>
         </Link>
 
         <nav className="flex flex-col items-center justify-center">

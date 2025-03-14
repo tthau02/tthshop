@@ -17,15 +17,20 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String,
             minLength: 6,
-            required: true
+            required: false
         }, 
+        googleId: {
+            type: String, 
+            unique: true,
+            sparse: true, 
+          },
         roles: {
             type: String,
-            emun: ["user", "admin"],
+            enum: ["user", "admin"],
             default: "user",
         }
     }, {
-        timeseries: true,
+        timestamps: true,
         versionKey: false
     }
 )
