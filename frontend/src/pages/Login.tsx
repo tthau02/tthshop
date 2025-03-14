@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import instance from "../config/axiosConfig";
 
-const Login = () => {
+const Login: React.FC = () => {
     const { register, handleSubmit, formState: {errors} } = useForm<ILogin>()
     const navigete = useNavigate();
     const onSubmit = async (data: ILogin) => {
@@ -18,7 +18,7 @@ const Login = () => {
            }
             toast.success("Đăng nhập thành công")
             navigete("/");
-        } catch (error: any) {
+        } catch (error) {
           const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại!";
           toast.error(errorMessage);
         }

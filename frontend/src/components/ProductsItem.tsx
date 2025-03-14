@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import IProduct from "../interfaces/products"
+import AddToCart from "./AddTocart"
 
 
 const ProductsItem = (props: IProduct) => {
@@ -13,13 +14,11 @@ const ProductsItem = (props: IProduct) => {
                 <h2 className="text-base font-semibold text-gray-800 ">{props.name}</h2>
             </Link>
             <p className="mt-2 text-gray-600">
-                Đánh giá: {props.rating}
+                Đánh giá:
             </p>
             <div className="flex items-center justify-between mt-4">
             <span className="text-base font-bold text-red-500">{props.price}$</span>
-            <button className="px-2 py-1 bg-red-500 text-white text-sm font-bold rounded hover:bg-red-400">
-                Add to Cart
-            </button>
+            <AddToCart productId={props._id} />
             </div>
         </div>
     </div>

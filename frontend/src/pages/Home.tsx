@@ -4,6 +4,7 @@ import IProduct from "../interfaces/products"
 import instance from "../config/axiosConfig";
 import { Link } from "react-router-dom";
 import { ICategory } from "../interfaces/category";
+import AddToCart from "../components/AddTocart";
 
 const Home = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -82,9 +83,7 @@ const Home = () => {
                 </p>
                 <div className="flex items-center justify-between mt-4">
                   <span className="text-lg font-bold text-red-500">${item.price}</span>
-                  <button className="px-3 py-2 bg-red-500 text-white text-xs font-bold uppercase rounded hover:bg-red-400">
-                    Add to Cart
-                  </button>
+                  <AddToCart productId={item._id}/>
                 </div>
               </div>
             </div>

@@ -3,6 +3,7 @@ import mongoose, { connect } from 'mongoose';
 import productRoter from './routers/product.js';
 import authRoter from './routers/auth.js';
 import categoryRoter from './routers/category.js';
+import cartRouter from './routers/cart.js';
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors"; 
@@ -27,5 +28,6 @@ connectDB();
 app.use('/api', productRoter);
 app.use('/api', authRoter);
 app.use('/api', categoryRoter);
+app.use('/api', cartRouter);
 
 export const viteNodeApp = app;

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import instance from "../config/axiosConfig";
 
-const Register = () => {
+const Register: React.FC = () => {
     const { register, handleSubmit, watch, formState: {errors} } = useForm<IRegister>()
     const navigate = useNavigate();
     const onSubmit = async (data: IRegister) => {

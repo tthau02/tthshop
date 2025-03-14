@@ -5,10 +5,22 @@ interface IProduct {
     description: string,
     categoryId: string,
     thumbnail: string,
-    rating: number
+    quantity: number
     brand: string
 }
 
 export default IProduct;
 
-export type ProductInput = Omit<IProduct,'_id'|'stock'|'rating'>;
+export type ProductInput = Omit<IProduct,'_id'>;
+
+
+export interface CartItem {
+    productId: IProduct;
+    quantity: number;
+  }
+  
+  export interface Cart {
+    userId: string;
+    items: CartItem[];
+    totalAmount: number;
+  }

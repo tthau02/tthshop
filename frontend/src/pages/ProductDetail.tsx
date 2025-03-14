@@ -1,123 +1,145 @@
-import { useEffect, useState } from "react"
-import IProduct from "../interfaces/products"
+import { useEffect, useState } from "react";
+import IProduct from "../interfaces/products";
 import { useParams } from "react-router-dom";
 import instance from "../config/axiosConfig";
 
 const ProductDetail = () => {
-  
-    const [ product, setProduct ] = useState<IProduct[]>([]);
-    const { id } = useParams();
-    useEffect(() => {
-        const getProduct = async () => {
-           try {
-            const {data} = await instance(`/products/${id}`)
-            setProduct(data);
-           } catch (error) {
-            console.log(error);
-           }
-        }
-        getProduct();
-    }, [id])
+  const [product, setProduct] = useState<IProduct | null>(null);
+//   const [relatedProducts, setRelatedProducts] = useState<IProduct[]>([]);
+  const [quantity, setQuantity] = useState(1);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const { data } = await instance(`/products/${id}`);
+        setProduct(data);
+        // const related = await instance(`/products`);
+        // setRelatedProducts(related.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProduct();
+  }, [id]);
+
+  if (!product) return <p>Loading...</p>;
+
   return (
-    <section className="max-w-[1250px] mx-auto m-5 mt-[6%]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Phần hình ảnh sản phẩm */}
-            <div>
-            <img src={product.thumbnail} alt="Tên Sản Phẩm" className="w-[400px] h-auto rounded-lg shadow-md" />
-            </div>
-            {/* Phần thông tin chi tiết sản phẩm */}
-            <section className="flex flex-col justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
-                    <p className="text-xl text-red-500 mt-2">Giá: {product.price}₫</p>
-                    <p className="mt-4 text-gray-600">
-                        {product.description}
-                    </p>
-                    {/* Thông tin thương hiệu */}
-                    <p className="mt-4 text-gray-600">
-                    <span className="font-semibold">Thương hiệu:</span> {product.brand}
-                    </p>
-                    {/* Đánh giá sao */}
-                    <div className="flex items-center mt-4">
-                    <div className="flex text-yellow-400">
-                        {/* Sử dụng biểu tượng sao, ví dụ với Heroicons */}
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.911c.969 0 1.371 1.24.588 1.81l-3.977 2.89a1 1 0 00-.364 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.977-2.89a1 1 0 00-1.175 0l-3.977 2.89c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.977-2.89c-.784-.57-.38-1.81.588-1.81h4.911a1 1 0 00.95-.69l1.518-4.674z" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.911c.969 0 1.371 1.24.588 1.81l-3.977 2.89a1 1 0 00-.364 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.977-2.89a1 1 0 00-1.175 0l-3.977 2.89c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.977-2.89c-.784-.57-.38-1.81.588-1.81h4.911a1 1 0 00.95-.69l1.518-4.674z" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.911c.969 0 1.371 1.24.588 1.81l-3.977 2.89a1 1 0 00-.364 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.977-2.89a1 1 0 00-1.175 0l-3.977 2.89c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.977-2.89c-.784-.57-.38-1.81.588-1.81h4.911a1 1 0 00.95-.69l1.518-4.674z" />
-                        </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.911c.969 0 1.371 1.24.588 1.81l-3.977 2.89a1 1 0 00-.364 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.977-2.89a1 1 0 00-1.175 0l-3.977 2.89c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.977-2.89c-.784-.57-.38-1.81.588-1.81h4.911a1 1 0 00.95-.69l1.518-4.674z" />
-                        </svg>
-                    </div>
-                    <p className="ml-2 text-gray-600">({product.rating} đánh giá)</p>
-                    </div>
-                </div>
-                {/* Nút hành động */}
-                <div className="mt-6 flex space-x-4">
-                    <button className="flex-1 px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-md hover:bg-blue-600">
-                    Thêm vào giỏ hàng
-                    </button>
-                    <button className="flex-1 px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-md hover:bg-red-800">
-                    Mua ngay
-                    </button>
-                </div>
-            </section>
+    <section className="max-w-[1250px] mx-auto m-5 mt-[8%]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {/* Image Section */}
+        <div className="flex flex-col items-center">
+          <img
+            src={product.thumbnail}
+            alt={product.name}
+            className="w-[450px] h-auto rounded-lg shadow-lg hover:scale-105 transition-transform"
+          />
+          <div className="flex gap-2 mt-4">
+            <img src={product.thumbnail} className="w-16 h-16 rounded-lg border cursor-pointer" />
+            <img src={product.thumbnail} className="w-16 h-16 rounded-lg border cursor-pointer" />
+            <img src={product.thumbnail} className="w-16 h-16 rounded-lg border cursor-pointer" />
+          </div>
         </div>
 
-    <section className="mt-4">
-        {/* Tiêu đề phần bình luận */}
-        <h2 className="text-2xl font-bold mb-4">Bình luận</h2>
-        {/* Form thêm bình luận mới */}
-        <form className="mb-6">
-            <div className="mb-4">
-            <label htmlFor="comment" className="sr-only">Bình luận</label>
-            <textarea id="comment" rows={4} className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline" placeholder="Viết bình luận..." defaultValue={""} />
-            </div>
-            <button type="submit" className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:shadow-outline">Đăng</button>
+        {/* Details Section */}
+        <div className="space-y-5">
+          <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
+          <p className="text-2xl text-red-500 font-semibold">{product.price}₫</p>
+          <p className="text-gray-700">{product.description}</p>
+          <p className="text-gray-600">
+            <span className="font-semibold">Thương hiệu:</span> {product.brand}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-semibold">Còn hàng:</span> {product.quantity}
+          </p>
+          {/* Quantity Selector */}
+          <div className="flex items-center space-x-4">
+            <p className="font-semibold">Số lượng:</p>
+            <button
+              className="px-3 py-1 bg-gray-300 rounded-lg"
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            >
+              -
+            </button>
+            <span className="text-xl font-semibold">{quantity}</span>
+            <button
+              className="px-3 py-1 bg-gray-300 rounded-lg"
+              onClick={() => setQuantity((q) => q + 1)}
+            >
+              +
+            </button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex space-x-4 mt-6">
+            <button className="flex-1 px-4 py-2 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-600">
+              Thêm vào giỏ hàng
+            </button>
+            <button className="flex-1 px-4 py-2 bg-red-600 text-white text-lg font-semibold rounded-md hover:bg-red-800">
+              Mua ngay
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Bình luận */}
+      <section className="mt-10">
+        <h2 className="text-xl font-bold mb-6">Bình luận</h2>
+        <form className="bg-gray-100 p-6 rounded-lg">
+          <textarea
+            rows={4}
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Viết bình luận..."
+          />
+          <button
+            type="submit"
+            className="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700"
+          >
+            Đăng
+          </button>
         </form>
-    </section>
 
         {/* Danh sách bình luận */}
-        <section className="space-y-4">
-        {/* Bình luận 1 */}
-        <div className="flex">
-            <div className="flex-shrink-0 mr-3">
-            <img className="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar người dùng" />
-            </div>
+        <div className="mt-6 space-y-4">
+          <div className="flex gap-4 items-start bg-white p-4 rounded-lg shadow">
+            <img
+              className="w-12 h-12 rounded-full"
+              src="https://via.placeholder.com/40"
+              alt="User Avatar"
+            />
             <div>
-            <div className="text-sm font-semibold text-gray-900">Nguyễn Văn A</div>
-            <div className="text-sm text-gray-600">2 giờ trước</div>
-            <p className="mt-1 text-gray-700">Sản phẩm rất tốt, tôi rất hài lòng!</p>
-            <div className="mt-2 flex space-x-4">
-                <button className="text-sm text-blue-500 hover:underline">Thích</button>
-                <button className="text-sm text-blue-500 hover:underline">Trả lời</button>
+              <p className="font-semibold">Nguyễn Văn A</p>
+              <p className="text-gray-500 text-sm">2 giờ trước</p>
+              <p className="mt-2 text-gray-700">Sản phẩm rất tốt, tôi rất hài lòng!</p>
+              <div className="mt-2 flex space-x-4 text-blue-500">
+                <button className="hover:underline">Thích</button>
+                <button className="hover:underline">Trả lời</button>
+              </div>
             </div>
-            </div>
+          </div>
         </div>
-        {/* Bình luận 2 */}
-        <div className="flex">
-            <div className="flex-shrink-0 mr-3">
-            <img className="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar người dùng" />
-            </div>
-            <div>
-            <div className="text-sm font-semibold text-gray-900">Trần Thị B</div>
-            <div className="text-sm text-gray-600">1 ngày trước</div>
-            <p className="mt-1 text-gray-700">Giao hàng nhanh chóng, chất lượng sản phẩm tuyệt vời.</p>
-            <div className="mt-2 flex space-x-4">
-                <button className="text-sm text-blue-500 hover:underline">Thích</button>
-                <button className="text-sm text-blue-500 hover:underline">Trả lời</button>
-            </div>
-            </div>
-        </div>
-        </section>
+      </section>
 
+      {/* Related Products Section */}
+      <section className="mt-10">
+        <h2 className="text-2xl font-bold mb-6">Sản phẩm liên quan</h2>
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {relatedProducts.slice(0, 4).map((item) => (
+            <div key={item.id} className="border rounded-lg p-4 hover:shadow-lg transition">
+              <img
+                src={item.thumbnail}
+                alt={item.name}
+                className="w-full h-40 object-cover rounded-md mb-3"
+              />
+              <h3 className="text-lg font-semibold">{item.name}</h3>
+              <p className="text-red-500 font-semibold">{item.price}₫</p>
+            </div>
+          ))}
+        </div> */}
+      </section>
     </section>
-  )
-}
+  );
+};
 
-export default ProductDetail
+export default ProductDetail;

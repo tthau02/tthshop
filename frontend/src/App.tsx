@@ -11,10 +11,8 @@ import Update from "./pages/admin/products/Update"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
 import ListCategory from "./pages/admin/category/ListCategory"
-import AddCategory from "./pages/admin/category/AddCategory"
-import UpdateCategory from "./pages/admin/category/UpdateCategory"
 import PrivateRoute from "./components/PrivateRoute"
-
+import CartPage from "./pages/CartPage"
 
 function App() {
 
@@ -26,10 +24,12 @@ function App() {
           <Route path="products" element={<Products />}/>
           <Route path="products/:id" element={<ProductDetail />}/>
           <Route path="sale" element={<h1>Khuyến mãi</h1>}/>
-          <Route path="contact" element={<h1>Liên hệ</h1>}/>
+          <Route path="contact" element={<h1>lien he</h1>}/>
 
           <Route path="register" element = {<Register/>}/>
           <Route path="login" element = {<Login/>}/>
+
+          <Route path="cart" element = {<CartPage/>}/>
         </Route>
         
         <Route element={<PrivateRoute/>}>
@@ -38,9 +38,7 @@ function App() {
             <Route path="products/add" element={<Add />}/> 
             <Route path="products/update/:id" element={<Update />}/> 
 
-            <Route path="categores" element={<ListCategory />}/> 
-            <Route path="categores/add" element={<AddCategory />}/> 
-            <Route path="categores/update/:id" element={<UpdateCategory />}/> 
+            <Route path="categores" element={<ListCategory />}/>  
           </Route>
         </Route>
 
