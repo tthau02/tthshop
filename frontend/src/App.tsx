@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Products from "./pages/Products"
 import ClientLayout from "./pages/layouts/ClientLayout"
-import ProductDetail from "./pages/ProductDetail"
+import ProductDetail from "./pages/ProductDetailPage"
 import AdminLayout from "./pages/layouts/AdminLayout"
 import List from "./pages/admin/products/List"
 import Add from "./pages/admin/products/Add"
@@ -13,6 +13,7 @@ import Login from "./pages/Login"
 import ListCategory from "./pages/admin/category/ListCategory"
 import PrivateRoute from "./components/PrivateRoute"
 import CartPage from "./pages/CartPage"
+import ProductDetailPage from "./pages/ProductDetailPage"
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
         <Route path="/" element={<ClientLayout/>}>
           <Route index element={<Home />}/>
           <Route path="products" element={<Products />}/>
-          <Route path="products/:id" element={<ProductDetail />}/>
+          <Route path="products/:id" element={<ProductDetailPage />}/>
           <Route path="sale" element={<h1>Khuyến mãi</h1>}/>
           <Route path="contact" element={<h1>lien he</h1>}/>
 

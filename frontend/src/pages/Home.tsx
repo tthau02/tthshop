@@ -77,7 +77,7 @@ const Home = () => {
               <img className="w-full h-48 object-cover" src={item.thumbnail} alt={item.name} />
               </Link>
               <div className="p-4">
-                <h2 className="text-xl font-semibold text-gray-800 ">{item.name}</h2>
+                <h3 className="font-semibold text-gray-800 ">{item.name}</h3>
                 <p className="mt-2 text-gray-600 text-sm">
                   {item.description}
                 </p>

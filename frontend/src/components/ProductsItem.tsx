@@ -11,11 +11,8 @@ const ProductsItem = (props: IProduct) => {
         </Link>
         <div className="p-4">
             <Link to={`/products/${props._id}`}>
-                <h2 className="text-base font-semibold text-gray-800 ">{props.name}</h2>
+                <h2 className="font-semibold text-gray-800 ">{props.name}</h2>
             </Link>
-            <p className="mt-2 text-gray-600">
-                Đánh giá:
-            </p>
             <div className="flex items-center justify-between mt-4">
             <span className="text-base font-bold text-red-500">{props.price}$</span>
             <AddToCart productId={props._id} />
