@@ -1,15 +1,7 @@
-// AuthContext.tsx
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import instance from "./config/axiosConfig";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface AuthContextType {
-  user: any; // Thay 'any' bằng type cụ thể của user nếu có
+  user: any;
   login: (userData: any) => void;
   logout: () => void;
 }

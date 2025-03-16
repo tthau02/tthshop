@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Button, message } from "antd";
 import instance from "../config/axiosConfig";
-import { useCart } from "../CartContext"; // Import useCart
+import { useCart } from "../context/CartContext";
 
-const AddToCart = ({ productId }: { productId: string }) => { // Định nghĩa kiểu cho prop
+const AddToCart = ({ productId }: { productId: string }) => {
   const [loading, setLoading] = useState(false);
-  const { fetchCartCount } = useCart(); // Lấy fetchCartCount từ context
-
+  const { fetchCartCount } = useCart();
   const handleAddToCart = async () => {
     try {
       setLoading(true);
@@ -33,12 +32,7 @@ const AddToCart = ({ productId }: { productId: string }) => { // Định nghĩa 
   };
 
   return (
-    <Button
-      type="primary"
-      danger
-      loading={loading}
-      onClick={handleAddToCart}
-    >
+    <Button type="primary" danger loading={loading} onClick={handleAddToCart}>
       {loading ? "Đang thêm..." : "+Add"}
     </Button>
   );

@@ -103,7 +103,6 @@ export const googleLogin = async (req, res) => {
   }
 
   try {
-    // Gọi API Google để lấy thông tin user
     const googleUserInfo = await axios.get(
       "https://www.googleapis.com/oauth2/v3/userinfo",
       {
@@ -112,10 +111,7 @@ export const googleLogin = async (req, res) => {
     );
 
     const { sub: googleId, email, name } = googleUserInfo.data;
-
-    // Kiểm tra xem user đã tồn tại chưa
     let user = await User.findOne({ email });
-
     if (!user) {
       user = await User.create({
         email,
@@ -123,18 +119,15 @@ export const googleLogin = async (req, res) => {
         googleId,
       });
     }
-
-    // Tạo JWT token (Đổi tên accessToken -> jwtToken)
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECERT_KEY, {
       expiresIn: "1h",
     });
 
-    user.password = undefined; // Ẩn password
-
+    user.password = undefined;
     return res.status(200).json({
       message: "Đăng nhập thành công",
       user,
-      accessToken: jwtToken, // Trả về token đã sửa
+      accessToken: jwtToken,
     });
   } catch (error) {
     console.error("Google Login Error:", error);

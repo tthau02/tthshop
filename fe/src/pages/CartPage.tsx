@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import instance from "../config/axiosConfig";
 import toast from "react-hot-toast";
-import { useCart } from "../CartContext";
+import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 
 interface Product {

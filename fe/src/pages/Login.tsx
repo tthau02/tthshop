@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import instance from "../config/axiosConfig";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useAuth } from "../context/AuthContext";
 
 const Login: React.FC = () => {
   const {
@@ -14,13 +15,16 @@ const Login: React.FC = () => {
     formState: { errors },
   } = useForm<ILogin>();
   const navigate = useNavigate();
+  const { login } = useAuth(); // Sử dụng hook useAuth để lấy hàm login
 
   const onSubmit = async (data: ILogin) => {
     try {
       const res = await instance.post(`/signin`, data);
       if (res.data) {
-        localStorage.setItem("token", res.data.accessToken);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        const { accessToken, user } = res.data;
+        localStorage.setItem("token", accessToken);
+        localStorage.setItem("user", JSON.stringify(user));
+        login(user);
         toast.success("Đăng nhập thành công");
         navigate("/");
       }
@@ -31,13 +35,9 @@ const Login: React.FC = () => {
     }
   };
 
-  // Xử lý đăng nhập bằng Google
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        console.log("Google Response:", tokenResponse);
-
-        // Gửi access token đến server
         const res = await instance.post("/auth/google", {
           accessToken: tokenResponse.access_token,
         });
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
         const { accessToken, user } = res.data;
         localStorage.setItem("token", accessToken);
         localStorage.setItem("user", JSON.stringify(user));
-
+        login(user);
         toast.success("Đăng nhập bằng Google thành công");
         navigate("/");
       } catch (error: any) {

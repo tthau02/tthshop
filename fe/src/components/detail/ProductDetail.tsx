@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import instance from "../../config/axiosConfig";
-import { useCart } from '../../CartContext';
+import { useCart } from "../../context/CartContext";
 import toast from "react-hot-toast";
 
 interface IProduct {
@@ -19,7 +19,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<IProduct | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
   const { id } = useParams<{ id: string }>();
   const { fetchCartCount } = useCart();
 
@@ -32,7 +32,8 @@ const ProductDetail = () => {
         setProduct(data.product || data);
         setLoading(false);
       } catch (error: any) {
-        const errorMessage = error.response?.data?.message || 'Lỗi khi lấy sản phẩm';
+        const errorMessage =
+          error.response?.data?.message || "Lỗi khi lấy sản phẩm";
         setError(errorMessage);
         toast.error(errorMessage);
         setLoading(false);
@@ -68,26 +69,37 @@ const ProductDetail = () => {
       toast.success("Thêm vào giỏ hàng thành công!");
       fetchCartCount();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Lỗi khi thêm vào giỏ hàng');
+      toast.error(error.response?.data?.message || "Lỗi khi thêm vào giỏ hàng");
     }
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Đang tải...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Đang tải...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500">
+        {error}
+      </div>
+    );
   }
 
   if (!product) {
-    return <div className="flex justify-center items-center h-screen">Sản phẩm không tồn tại</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Sản phẩm không tồn tại
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto p-4 mt-20">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
         <div className="flex flex-col items-center">
           <img
             src={product.thumbnail}
@@ -95,15 +107,26 @@ const ProductDetail = () => {
             className="w-[450px] h-auto rounded-lg shadow-lg hover:scale-105 transition-transform"
           />
           <div className="flex gap-2 mt-4">
-            <img src={product.thumbnail} className="w-16 h-16 rounded-lg border cursor-pointer" />
-            <img src={product.thumbnail} className="w-16 h-16 rounded-lg border cursor-pointer" />
-            <img src={product.thumbnail} className="w-16 h-16 rounded-lg border cursor-pointer" />
+            <img
+              src={product.thumbnail}
+              className="w-16 h-16 rounded-lg border cursor-pointer"
+            />
+            <img
+              src={product.thumbnail}
+              className="w-16 h-16 rounded-lg border cursor-pointer"
+            />
+            <img
+              src={product.thumbnail}
+              className="w-16 h-16 rounded-lg border cursor-pointer"
+            />
           </div>
         </div>
 
         <div className="space-y-5">
           <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
-          <p className="text-2xl text-red-500 font-semibold">{product.price.toLocaleString()}₫</p>
+          <p className="text-2xl text-red-500 font-semibold">
+            {product.price.toLocaleString()}₫
+          </p>
           <p className="text-gray-700">{product.description}</p>
           <p className="text-gray-600">
             <span className="font-semibold">Thương hiệu:</span> {product.brand}
@@ -122,7 +145,9 @@ const ProductDetail = () => {
             <span className="text-xl font-semibold">{quantity}</span>
             <button
               className="px-3 py-1 bg-gray-300 rounded-lg"
-              onClick={() => setQuantity((q) => Math.min(product.quantity, q + 1))}
+              onClick={() =>
+                setQuantity((q) => Math.min(product.quantity, q + 1))
+              }
             >
               +
             </button>

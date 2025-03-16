@@ -1,26 +1,18 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
-import { useCart } from "../CartContext";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(() => {
-    return JSON.parse(localStorage.getItem("user") || "null");
-  });
+  const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { cartItemCount } = useCart();
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
-    if (storedUser) setUser(storedUser);
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
+    logout();
     setIsDropdownOpen(false);
     navigate("/");
   };
