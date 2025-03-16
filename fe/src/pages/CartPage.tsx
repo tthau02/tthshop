@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import instance from '../config/axiosConfig';
-import toast from 'react-hot-toast';
-import { useCart } from '../CartContext';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import instance from "../config/axiosConfig";
+import toast from "react-hot-toast";
+import { useCart } from "../CartContext";
+import { Link } from "react-router-dom";
 
 interface Product {
   _id: string;
@@ -35,7 +35,7 @@ const PageCart: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { fetchCartCount } = useCart();
 
-  const user = JSON.parse(localStorage.getItem("user") || '{}');
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user._id;
 
   const fetchCart = async () => {
@@ -44,7 +44,7 @@ const PageCart: React.FC = () => {
       setCartData(response.data);
       setLoading(false);
     } catch (err) {
-      setError('Không thể tải giỏ hàng');
+      setError("Không thể tải giỏ hàng");
       setLoading(false);
     }
   };
@@ -55,19 +55,19 @@ const PageCart: React.FC = () => {
 
   const updateQuantity = async (productId: string, newQuantity: number) => {
     if (newQuantity < 1) {
-      toast.error('Số lượng phải lớn hơn 0');
+      toast.error("Số lượng phải lớn hơn 0");
       return;
     }
     try {
-      await instance.put('/cart/update', {
+      await instance.put("/cart/update", {
         userId,
         productId,
         quantity: newQuantity,
       });
-      fetchCart(); 
-      fetchCartCount(); 
+      fetchCart();
+      fetchCartCount();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Không thể cập nhật số lượng');
+      toast.error(err.response?.data?.message || "Không thể cập nhật số lượng");
     }
   };
 
@@ -85,11 +85,13 @@ const PageCart: React.FC = () => {
                     `/cart/remove?userId=${userId}&productId=${productId}`
                   );
                   toast.dismiss(t.id);
-                  toast.success('Xóa sản phẩm thành công!');
+                  toast.success("Xóa sản phẩm thành công!");
                   fetchCart();
                   fetchCartCount();
                 } catch (err: any) {
-                  toast.error(err.response?.data?.message || 'Không thể xóa sản phẩm');
+                  toast.error(
+                    err.response?.data?.message || "Không thể xóa sản phẩm"
+                  );
                 }
               }}
             >
@@ -109,14 +111,25 @@ const PageCart: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Đang tải...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Đang tải...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500">
+        {error}
+      </div>
+    );
   }
 
-  if (!cartData || (Array.isArray(cartData.cart) && cartData.cart.length === 0)) {
+  if (
+    !cartData ||
+    (Array.isArray(cartData.cart) && cartData.cart.length === 0)
+  ) {
     return (
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-4">Giỏ hàng của bạn</h1>
@@ -128,7 +141,7 @@ const PageCart: React.FC = () => {
   return (
     <div className="max-w-[1100px] mx-auto m-5 mt-[80px] px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Giỏ hàng của bạn</h1>
-      {'userId' in cartData.cart && (
+      {"userId" in cartData.cart && (
         <div className="mb-6 bg-gray-100 p-4 rounded-lg">
           <h2 className="text-lg font-semibold">Thông tin khách hàng</h2>
           <p>Tên: {cartData.cart.userId.username}</p>
@@ -163,14 +176,18 @@ const PageCart: React.FC = () => {
               <div className="md:col-span-2 text-center flex items-center justify-center space-x-2">
                 <button
                   className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                  onClick={() => updateQuantity(item.productId._id, item.quantity - 1)}
+                  onClick={() =>
+                    updateQuantity(item.productId._id, item.quantity - 1)
+                  }
                 >
                   -
                 </button>
                 <span>{item.quantity}</span>
                 <button
                   className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                  onClick={() => updateQuantity(item.productId._id, item.quantity + 1)}
+                  onClick={() =>
+                    updateQuantity(item.productId._id, item.quantity + 1)
+                  }
                 >
                   +
                 </button>
@@ -189,17 +206,20 @@ const PageCart: React.FC = () => {
             </div>
           ))}
       </div>
-       {cartData.totalAmount && (
+      {cartData.totalAmount && (
         <div className="mt-6 text-right">
           <div className="bg-gray-100 p-4 rounded-lg inline-block">
             <p className="text-lg font-semibold">
-              Tổng cộng:{' '}
+              Tổng cộng:{" "}
               <span className="text-xl text-blue-600">
                 {cartData.totalAmount.toLocaleString()} VNĐ
               </span>
             </p>
-            <Link to="/products" className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors mr-7">
-                Tiếp tục mua hàng
+            <Link
+              to="/products"
+              className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors mr-7"
+            >
+              Tiếp tục mua hàng
             </Link>
             <button className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors">
               Thanh toán
@@ -209,9 +229,6 @@ const PageCart: React.FC = () => {
       )}
     </div>
   );
-    
-
-  
 };
 
 export default PageCart;

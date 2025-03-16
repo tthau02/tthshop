@@ -1,8 +1,8 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
-import { useCart } from '../CartContext';
+import { useCart } from "../CartContext";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -10,7 +10,12 @@ const Header: React.FC = () => {
     return JSON.parse(localStorage.getItem("user") || "null");
   });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { cartItemCount } = useCart(); // Lấy cartItemCount từ context
+  const { cartItemCount } = useCart();
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+    if (storedUser) setUser(storedUser);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -51,16 +56,28 @@ const Header: React.FC = () => {
             </button>
           </div>
           <div className="flex items-center justify-center space-x-6 mt-2">
-            <NavLink to="/" className="text-white text-[14px] hover:text-red-300 transition-colors">
+            <NavLink
+              to="/"
+              className="text-white text-[14px] hover:text-red-300 transition-colors"
+            >
               Trang Chủ
             </NavLink>
-            <NavLink to="/products" className="text-white text-[14px] hover:text-red-300 transition-colors">
+            <NavLink
+              to="/products"
+              className="text-white text-[14px] hover:text-red-300 transition-colors"
+            >
               Sản Phẩm
             </NavLink>
-            <NavLink to="/sale" className="text-white text-[14px] hover:text-red-300 transition-colors">
+            <NavLink
+              to="/sale"
+              className="text-white text-[14px] hover:text-red-300 transition-colors"
+            >
               Khuyến Mãi
             </NavLink>
-            <NavLink to="/contact" className="text-white text-[14px] hover:text-red-300 transition-colors">
+            <NavLink
+              to="/contact"
+              className="text-white text-[14px] hover:text-red-300 transition-colors"
+            >
               Liên Hệ
             </NavLink>
           </div>
@@ -92,13 +109,22 @@ const Header: React.FC = () => {
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-lg shadow-lg z-50">
                   <ul className="py-2">
-                    <li onClick={() => handleOptionClick("profile")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer">
+                    <li
+                      onClick={() => handleOptionClick("profile")}
+                      className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                    >
                       Thông tin cá nhân
                     </li>
-                    <li onClick={() => handleOptionClick("orders")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer">
+                    <li
+                      onClick={() => handleOptionClick("orders")}
+                      className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                    >
                       Lịch sử mua hàng
                     </li>
-                    <li onClick={() => handleOptionClick("logout")} className="px-4 py-2 hover:bg-gray-700 cursor-pointer">
+                    <li
+                      onClick={() => handleOptionClick("logout")}
+                      className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                    >
                       Đăng xuất
                     </li>
                   </ul>

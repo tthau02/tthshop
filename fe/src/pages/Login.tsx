@@ -1,17 +1,20 @@
-import React from 'react';
+import React from "react";
 import { useForm } from "react-hook-form";
 import { ILogin } from "../interfaces/users";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 import instance from "../config/axiosConfig";
-import { useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Login: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<ILogin>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILogin>();
   const navigate = useNavigate();
 
-  // Xử lý đăng nhập bằng email/mật khẩu
   const onSubmit = async (data: ILogin) => {
     try {
       const res = await instance.post(`/signin`, data);
@@ -22,7 +25,8 @@ const Login: React.FC = () => {
         navigate("/");
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại!";
+      const errorMessage =
+        error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại!";
       toast.error(errorMessage);
     }
   };
@@ -31,22 +35,30 @@ const Login: React.FC = () => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const res = await instance.post('/auth/google', {
-          token: tokenResponse.access_token,
-        });
-        const { token, user } = res.data;
+        console.log("Google Response:", tokenResponse);
 
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        // Gửi access token đến server
+        const res = await instance.post("/auth/google", {
+          accessToken: tokenResponse.access_token,
+        });
+
+        const { accessToken, user } = res.data;
+        localStorage.setItem("token", accessToken);
+        localStorage.setItem("user", JSON.stringify(user));
+
         toast.success("Đăng nhập bằng Google thành công");
-        navigate('/');
+        navigate("/");
       } catch (error: any) {
-        toast.error(error.response?.data?.message || 'Lỗi khi đăng nhập bằng Google');
+        console.error(error.response);
+        toast.error(
+          error.response?.data?.message || "Lỗi khi đăng nhập bằng Google"
+        );
       }
     },
     onError: () => {
-      toast.error('Đăng nhập bằng Google thất bại');
+      toast.error("Đăng nhập bằng Google thất bại");
     },
+    scope: "email profile",
   });
 
   return (
@@ -73,9 +85,7 @@ const Login: React.FC = () => {
               })}
             />
             {errors?.email && (
-              <span className="p-2 text-red-600">
-                {errors?.email?.message}
-              </span>
+              <span className="p-2 text-red-600">{errors?.email?.message}</span>
             )}
           </div>
           <div className="mt-4">

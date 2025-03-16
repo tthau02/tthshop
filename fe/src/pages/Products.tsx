@@ -8,7 +8,9 @@ import { ICategory } from "../interfaces/category";
 const Products: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]); // Danh sách danh mục
-  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
+  );
   const [priceRange, setPriceRange] = useState<number>(0); // Lọc giá
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -42,7 +44,11 @@ const Products: React.FC = () => {
           {categories.map((category, index) => (
             <li
               key={index}
-              className={`cursor-pointer p-2 rounded-lg ${selectedCategory === category ? "bg-red-500 text-white" : "hover:bg-gray-200"}`}
+              className={`cursor-pointer p-2 rounded-lg ${
+                selectedCategory === category
+                  ? "bg-red-500 text-white"
+                  : "hover:bg-gray-200"
+              }`}
               onClick={() => setSelectedCategory(category)}
             >
               {category.categoryName}
@@ -50,7 +56,9 @@ const Products: React.FC = () => {
           ))}
         </ul>
 
-        <h4 className="mt-4 text-lg font-bold text-gray-700 mb-3">Lọc theo giá</h4>
+        <h4 className="mt-4 text-lg font-bold text-gray-700 mb-3">
+          Lọc theo giá
+        </h4>
         <input
           type="range"
           min="0"
@@ -77,8 +85,12 @@ const Products: React.FC = () => {
         {/* Phân trang */}
         <div className="flex justify-center mt-10 mb-10">
           <nav className="flex items-center space-x-2">
-            <button 
-              className={`px-4 py-2 text-gray-700 bg-slate-200 border border-gray-300 rounded-l ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
+            <button
+              className={`px-4 py-2 text-gray-700 bg-slate-200 border border-gray-300 rounded-l ${
+                currentPage === 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-200"
+              }`}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
             >
@@ -86,17 +98,25 @@ const Products: React.FC = () => {
             </button>
 
             {Array.from({ length: totalPages }, (_, index) => (
-              <button 
+              <button
                 key={index + 1}
-                className={`px-3 py-1 border ${currentPage === index + 1 ? "bg-red-500 text-white" : "bg-white text-gray-700 hover:bg-gray-200"}`}
+                className={`px-3 py-1 border ${
+                  currentPage === index + 1
+                    ? "bg-red-500 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-200"
+                }`}
                 onClick={() => setCurrentPage(index + 1)}
               >
                 {index + 1}
               </button>
             ))}
 
-            <button 
-              className={`px-4 py-2 text-gray-700 bg-slate-200 border border-gray-300 rounded-r ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
+            <button
+              className={`px-4 py-2 text-gray-700 bg-slate-200 border border-gray-300 rounded-r ${
+                currentPage === totalPages
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-200"
+              }`}
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(currentPage + 1)}
             >
