@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import Comment from "../components/comment";
+import Comment from "../components/ui/Comment";
 import ProductDetail from "../components/detail/ProductDetail";
 import RelatedProducts from "../components/detail/RelatedProducts";
 

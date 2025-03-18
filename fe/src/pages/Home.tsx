@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import BannerSlider from "../components/BannerSlider ";
+import BannerSlider from "../components/ui/BannerSlider ";
 import IProduct from "../interfaces/products";
 import instance from "../config/axiosConfig";
 import { Link } from "react-router-dom";
 import { ICategory } from "../interfaces/category";
-import AddToCart from "../components/AddTocart";
+import AddToCart from "../components/common/AddTocart";
 
 const Home = () => {
   const [products, setProducts] = useState<IProduct[]>([]);

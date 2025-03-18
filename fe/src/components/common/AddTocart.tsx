@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, message } from "antd";
-import instance from "../config/axiosConfig";
-import { useCart } from "../context/CartContext";
+import instance from "../../config/axiosConfig";
+import { useCart } from "../../context/CartContext";
 
 const AddToCart = ({ productId }: { productId: string }) => {
   const [loading, setLoading] = useState(false);

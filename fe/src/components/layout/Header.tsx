@@ -2,8 +2,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
-import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
+import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
