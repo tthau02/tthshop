@@ -14,32 +14,33 @@ const ListCategory = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ICategory>();
 
-  useEffect(() => {
-    const getAllCategorys = async () => {
+  // Hàm lấy danh sách danh mục
+  const fetchCategories = async () => {
+    try {
       const res = await instance.get("/categores");
       setCategorys(res.data);
-    };
-    getAllCategorys();
-  }, []);
-
-  const removeCate = async (_id: number) => {
-    if (confirm("Bạn muốn xóa danh mục này không")) {
-      await instance.delete(`/categores/${_id}`);
-      setCategorys(categorys.filter((item) => item._id !== _id));
-      toast.success("Xóa thành công");
+    } catch (error) {
+      toast.error("Lỗi khi tải danh sách danh mục");
     }
   };
 
-  const handleAddCategory = async (data: ICategory) => {
-    try {
-      await instance.post(`/categores`, data);
-      toast.success("Thêm mới thành công");
-      setIsModalOpen(false);
-    } catch (error) {
-      toast.error((error as AxiosError).message);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const removeCate = async (_id: string) => {
+    if (confirm("Bạn muốn xóa danh mục này không")) {
+      try {
+        await instance.delete(`/categores/${_id}`); // Đảm bảo endpoint đúng
+        setCategorys(categorys.filter((item) => item._id !== _id));
+        toast.success("Xóa thành công");
+      } catch (error) {
+        toast.error("Lỗi khi xóa danh mục");
+      }
     }
   };
 
@@ -48,11 +49,41 @@ const ListCategory = () => {
     setIsEditModalOpen(true);
   };
 
+  const handleAddCategory = async (data: ICategory) => {
+    try {
+      const formData = new FormData();
+      formData.append("categoryName", data.categoryName);
+      if (data.desc) formData.append("desc", data.desc);
+      if (data.image && data.image[0]) formData.append("image", data.image[0]);
+
+      await instance.post(`/categores`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      toast.success("Thêm mới thành công");
+      setIsModalOpen(false);
+      reset();
+      fetchCategories(); // Tải lại danh sách sau khi thêm
+    } catch (error) {
+      toast.error((error as AxiosError).message);
+    }
+  };
+
   const handleUpdateCategory = async (data: ICategory) => {
     try {
-      await instance.put(`/categores/${editCategory?._id}`, data);
+      const formData = new FormData();
+      formData.append("categoryName", data.categoryName);
+      if (data.desc) formData.append("desc", data.desc);
+      if (data.image && data.image[0]) formData.append("image", data.image[0]);
+
+      await instance.put(`/categores/${editCategory?._id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       toast.success("Cập nhật thành công");
       setIsEditModalOpen(false);
+      reset();
+      fetchCategories(); // Tải lại danh sách sau khi cập nhật
     } catch (error) {
       toast.error((error as AxiosError).message);
     }
@@ -83,6 +114,7 @@ const ListCategory = () => {
           <thead className="bg-gray-200">
             <tr>
               <th className="py-3 px-4">ID</th>
+              <th className="py-3 px-4">Image</th>
               <th className="py-3 px-4">Category Name</th>
               <th className="py-3 px-4">Description</th>
               <th className="py-3 px-4">Actions</th>
@@ -92,8 +124,19 @@ const ListCategory = () => {
             {categorys.map((item, index) => (
               <tr key={item._id} className="border-t">
                 <td className="py-3 px-4">{index + 1}</td>
+                <td className="py-3 px-4">
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={item.categoryName}
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                  ) : (
+                    "No image"
+                  )}
+                </td>
                 <td className="py-3 px-4">{item.categoryName}</td>
-                <td className="py-3 px-4">{item.desc}</td>
+                <td className="py-3 px-4">{item.desc || "N/A"}</td>
                 <td className="py-3 px-4">
                   <button
                     onClick={() => handleEditCategory(item)}
@@ -117,7 +160,7 @@ const ListCategory = () => {
       {/* Add Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-350">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[350px]">
             <h2 className="text-xl font-bold mb-4">Thêm danh mục mới</h2>
             <form onSubmit={handleSubmit(handleAddCategory)}>
               <input
@@ -136,14 +179,27 @@ const ListCategory = () => {
                 placeholder="Description"
                 {...register("desc")}
               />
+              <input
+                type="file"
+                accept="image/*"
+                className="w-full p-2 border rounded mb-3"
+                {...register("image")}
+              />
               <div className="flex justify-end">
                 <button
-                  onClick={() => setIsModalOpen(false)}
+                  type="button"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    reset(); // Reset form khi hủy
+                  }}
                   className="mr-2 p-2 bg-gray-300 rounded"
                 >
                   Hủy
                 </button>
-                <button className="p-2 bg-blue-500 text-white rounded">
+                <button
+                  type="submit"
+                  className="p-2 bg-blue-500 text-white rounded"
+                >
                   Thêm
                 </button>
               </div>
@@ -155,7 +211,7 @@ const ListCategory = () => {
       {/* Edit Modal */}
       {isEditModalOpen && editCategory && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-350">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[350px]">
             <h2 className="text-xl font-bold mb-4">Chỉnh sửa danh mục</h2>
             <form onSubmit={handleSubmit(handleUpdateCategory)}>
               <input
@@ -176,14 +232,36 @@ const ListCategory = () => {
                 defaultValue={editCategory.desc}
                 {...register("desc")}
               />
+              <div className="mb-3">
+                {editCategory.image && (
+                  <img
+                    src={editCategory.image}
+                    alt={editCategory.categoryName}
+                    className="w-24 h-24 object-cover rounded mb-2"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="w-full p-2 border rounded"
+                  {...register("image")}
+                />
+              </div>
               <div className="flex justify-end">
                 <button
-                  onClick={() => setIsEditModalOpen(false)}
+                  type="button"
+                  onClick={() => {
+                    setIsEditModalOpen(false);
+                    reset(); // Reset form khi hủy
+                  }}
                   className="mr-2 p-2 bg-gray-300 rounded"
                 >
                   Hủy
                 </button>
-                <button className="p-2 bg-blue-500 text-white rounded">
+                <button
+                  type="submit"
+                  className="p-2 bg-blue-500 text-white rounded"
+                >
                   Cập nhật
                 </button>
               </div>

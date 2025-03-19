@@ -17,16 +17,25 @@ const productsSchema = Joi.object({
 });
 
 export const getProductsPaginate = async (req, res) => {
-  const { _page, _limit } = req.query;
-  const options = {
-    page: _page,
-    limit: _limit ? parseInt(_limit) : 10,
-    sort: { createdAt: -1 },
-    populate: { path: "categoryId", select: "categoryName" },
-  };
   try {
-    const products = await Product.paginate({}, options);
-    return res.status(200).json(products);
+    const { _page = 1, _limit = 8, category, price_lte, q } = req.query;
+    const page = parseInt(_page);
+    const limit = parseInt(_limit);
+    const skip = (page - 1) * limit;
+
+    let query = {};
+    if (category) query.category = category;
+    if (price_lte) query.price = { $lte: parseInt(price_lte) };
+    if (q) query.name = { $regex: q, $options: "i" }; // Tìm kiếm theo tên
+
+    const products = await Product.find(query).skip(skip).limit(limit);
+    const totalDocs = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalDocs / limit);
+
+    return res.status(200).json({
+      docs: products,
+      totalPages,
+    });
   } catch (error) {
     return res.status(400).json({
       message: error.message,
@@ -182,5 +191,21 @@ export const removeProduct = async (req, res) => {
     return res.status(400).json({
       message: error.message,
     });
+  }
+};
+
+export const searchProducts = async (req, res) => {
+  try {
+    const { q } = req.query; // Lấy tham số q từ query
+    if (!q) {
+      return res.status(400).json({ message: "Vui lòng nhập từ khóa" });
+    }
+    const products = await Product.find({
+      name: { $regex: q, $options: "i" }, // Tìm theo tên, không phân biệt hoa thường
+    }).limit(10);
+
+    return res.status(200).json({ products });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };

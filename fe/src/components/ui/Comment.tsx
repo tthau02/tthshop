@@ -1,6 +1,6 @@
 const Comment = () => {
   return (
-    <section className="mt-10">
+    <section className="mt-10 bg-white rounded-md p-5">
       <h2 className="text-xl font-bold mb-6">Bình luận</h2>
       <form className="bg-gray-100 p-6 rounded-lg">
         <textarea

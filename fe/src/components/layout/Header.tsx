@@ -4,6 +4,7 @@ import { FaUser } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
+import Search from "../ui/Search";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -37,16 +38,7 @@ const Header: React.FC = () => {
         </Link>
 
         <nav className="flex flex-col items-center justify-center">
-          <div className="ml-10 flex items-center">
-            <input
-              type="text"
-              placeholder="Search"
-              className="p-2 text-[14px] rounded-l-lg w-[350px] bg-gray-800 text-white border-none focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
-            <button className="p-2 rounded-r-lg text-white bg-red-500 text-[14px] hover:bg-red-600 transition-colors">
-              Search
-            </button>
-          </div>
+          <Search />
           <div className="flex items-center justify-center space-x-6 mt-2">
             <NavLink
               to="/"

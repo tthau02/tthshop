@@ -7,7 +7,7 @@ const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <section className="max-w-[1250px] mx-auto m-5 mt-[8%]">
+    <section className="max-w-[1300px] mx-auto m-5 mt-[5%]">
       <ProductDetail />
       <Comment />
       {id && <RelatedProducts productId={id} />}

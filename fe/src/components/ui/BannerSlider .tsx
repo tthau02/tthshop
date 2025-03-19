@@ -1,10 +1,22 @@
 import { useState, useEffect } from "react";
-
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 const BannerSlider = () => {
   const slides = [
-    { id: 1, image: "https://happyphone.vn/wp-content/uploads/2024/09/Banner-Iphone-16.webp"},
-    { id: 2, image: "https://shopdunk.com/images/thumbs/0022013_banner%20iphone%2015%20pro%20max%20TH_PC_1600.jpeg" },
-    { id: 3, image: "https://www.homecredit.vn/static/cdf3446968e365f4f8fbc9266010e77a/ab7c8/mua_tra_gop_iphone_16_banner_74273b74f0.webp" },
+    {
+      id: 1,
+      image:
+        "https://happyphone.vn/wp-content/uploads/2024/09/Banner-Iphone-16.webp",
+    },
+    {
+      id: 2,
+      image:
+        "https://shopdunk.com/images/thumbs/0022013_banner%20iphone%2015%20pro%20max%20TH_PC_1600.jpeg",
+    },
+    {
+      id: 3,
+      image:
+        "https://www.homecredit.vn/static/cdf3446968e365f4f8fbc9266010e77a/ab7c8/mua_tra_gop_iphone_16_banner_74273b74f0.webp",
+    },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,25 +34,25 @@ const BannerSlider = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 5000); 
+    }, 5000);
     return () => clearInterval(interval);
-  }, [currentIndex]); 
+  }, [currentIndex]);
 
   return (
-    <div className="relative w-full h-4/5 md:h-[500px] overflow-hidden">
+    <div className="relative w-full h-4/5 md:h-[500px] overflow-hidden mt-20">
       {/* Slides */}
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {slides.map((slide) => (
-            <div key={slide.id} className="relative min-w-full h-full">
+          <div key={slide.id} className="relative min-w-full h-full">
             <img
               src={slide.image}
               alt={slide.caption}
               className="w-full h-[500px]"
             />
-        </div>
+          </div>
         ))}
       </div>
 
@@ -49,13 +61,13 @@ const BannerSlider = () => {
         onClick={prevSlide}
         className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full focus:outline-none"
       >
-        &#9664;
+        <AiFillCaretLeft />
       </button>
       <button
         onClick={nextSlide}
         className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full focus:outline-none"
       >
-        &#9654;
+        <AiFillCaretRight />
       </button>
 
       {/* Indicators */}

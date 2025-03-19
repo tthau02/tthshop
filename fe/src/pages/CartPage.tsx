@@ -41,6 +41,7 @@ const PageCart: React.FC = () => {
   const fetchCart = async () => {
     try {
       const response = await instance.get<CartResponse>(`/cart/${userId}`);
+      console.log(response.data);
       setCartData(response.data);
       setLoading(false);
     } catch (err) {
@@ -139,7 +140,7 @@ const PageCart: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[1100px] mx-auto m-5 mt-[80px] px-4 py-8">
+    <div className="max-w-[1050px] bg-white p-6 rounded-md mx-auto m-5 mt-[110px] px-4 py-8 ">
       <h1 className="text-2xl font-bold mb-6">Giỏ hàng của bạn</h1>
       {"userId" in cartData.cart && (
         <div className="mb-6 bg-gray-100 p-4 rounded-lg">
