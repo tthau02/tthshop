@@ -51,9 +51,9 @@ export const getCart = async (req, res) => {
     const cart = await Cart.findOne({ userId })
       .populate({
         path: "items.productId",
-        select: "name price image stock",
+        select: "name price thumbnail stock",
       })
-      .populate("userId", "name email");
+      .populate("userId", "usernam email");
 
     if (!cart || cart.items.length === 0) {
       return res.status(200).json({ message: "Giỏ hàng trống", cart: [] });
@@ -118,7 +118,9 @@ export const updateCartQuantity = async (req, res) => {
       (item) => item.productId.toString() === productId
     );
     if (itemIndex === -1) {
-      return res.status(404).json({ message: "Sản phẩm không có trong giỏ hàng" });
+      return res
+        .status(404)
+        .json({ message: "Sản phẩm không có trong giỏ hàng" });
     }
 
     cart.items[itemIndex].quantity = quantity;

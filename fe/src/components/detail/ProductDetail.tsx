@@ -4,6 +4,7 @@ import instance from "../../config/axiosConfig";
 import { useCart } from "../../context/CartContext";
 import toast from "react-hot-toast";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import { FaCartPlus } from "react-icons/fa";
 
 interface IProduct {
   _id: string;
@@ -131,7 +132,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="bg-white rounded-md max-w-[1300px] mx-auto m-5 mt-[8%] flex p-6">
+    <div className="rounded-md max-w-[1200px] mx-auto m-5 mt-[8%] flex p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="flex flex-col items-center">
           {product.images && product.images.length > 0 && (
@@ -139,7 +140,7 @@ const ProductDetail = () => {
               <img
                 src={product.images[currentImageIndex]}
                 alt={`Slide ${currentImageIndex}`}
-                className="w-full h-[340px] object-cover rounded-lg shadow-md"
+                className="w-full h-[340px] object-cover rounded-lg"
               />
               <button
                 onClick={() =>
@@ -181,7 +182,7 @@ const ProductDetail = () => {
         </div>
 
         <div className="space-y-5">
-          <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
+          <h1 className="text-2xl font-normal text-gray-900">{product.name}</h1>
           <p className="text-2xl text-red-500 font-semibold">
             {product.price.toLocaleString()}₫
           </p>
@@ -212,16 +213,19 @@ const ProductDetail = () => {
               +
             </button>
           </div>
-          <div className="flex space-x-4 mt-6">
+          <div className="flex space-x-2 mt-6">
             <button
-              className="flex-1 px-4 py-2 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed"
+              className="text-[28px] text-red-500 border-2 border-red-400 hover:bg-red-200 px-3 py-2 rounded-md transition-all"
               onClick={handleAddToCart}
               disabled={isAddingToCart}
             >
-              {isAddingToCart ? "Đang thêm..." : "Thêm vào giỏ hàng"}
+              <FaCartPlus />
             </button>
-            <button className="flex-1 px-4 py-2 bg-red-600 text-white text-lg font-semibold rounded-md hover:bg-red-800">
+            <button className="px-3 py-2 w-[160px] bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition-all">
               Mua ngay
+            </button>
+            <button className="px-3 py-2 w-[160px] bg-black text-white font-semibold rounded-md hover:bg-gray-700 transition-all">
+              Trả góp
             </button>
           </div>
         </div>

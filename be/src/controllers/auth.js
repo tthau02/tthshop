@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import axios from "axios";
+import { getBaseUrl } from "../config/server.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -18,6 +19,15 @@ const signupSchema = Joi.object({
 const signinSchema = Joi.object({
   email: Joi.string().email().required().trim(),
   password: Joi.string().min(6).required(),
+});
+
+const userSchema = Joi.object({
+  username: Joi.string().min(3).trim(),
+  email: Joi.string().email().trim(),
+  phone: Joi.string().trim(),
+  image: Joi.string(),
+  address: Joi.string().trim(),
+  roles: Joi.string().valid("user", "admin"),
 });
 
 export const signup = async (req, res) => {
@@ -132,5 +142,115 @@ export const googleLogin = async (req, res) => {
   } catch (error) {
     console.error("Google Login Error:", error);
     return res.status(401).json({ message: "Đăng nhập bằng Google thất bại" });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    // Xử lý ảnh đại diện (nếu có)
+    let image = null;
+    if (req.files && req.files.length > 0) {
+      // Chỉ lấy ảnh đầu tiên vì chỉ có một ảnh đại diện
+      image = `${getBaseUrl()}/uploads/${req.files[0].filename}`;
+    }
+
+    // Tạo dữ liệu user từ req.body và image (nếu có)
+    const userData = {
+      ...req.body,
+      ...(image && { image }), // Chỉ thêm image nếu có ảnh mới
+    };
+
+    // Validate dữ liệu với Joi
+    const { error, value } = userSchema.validate(userData, {
+      abortEarly: false,
+    });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.status(400).json({ errors });
+    }
+
+    // Cập nhật user trong database
+    const userUpdate = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: value }, // Sử dụng $set để đảm bảo chỉ cập nhật các trường được gửi
+      {
+        new: true, // Trả về document đã cập nhật
+        runValidators: true, // Chạy các validator của Mongoose (nếu có)
+      }
+    );
+
+    // Kiểm tra nếu không tìm thấy user
+    if (!userUpdate) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+    }
+
+    return res.status(200).json({
+      message: "Cập nhật user thành công!",
+      userUpdate,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi server khi cập nhật",
+      error: error.message,
+    });
+  }
+};
+
+export const getOneUser = async (req, res) => {
+  try {
+    const getUser = await User.findById(req.params.id);
+    return res.status(200).json(getUser);
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+//admin user
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 });
+    res
+      .status(200)
+      .json({ message: "Lấy danh sách người dùng thành công!", users });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi server", error: error.message });
+  }
+};
+
+// Cập nhật vai trò người dùng
+export const updateUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { roles } = req.body;
+
+    if (!["admin", "user"].includes(roles)) {
+      return res.status(400).json({ message: "Vai trò không hợp lệ!" });
+    }
+
+    const user = await User.findByIdAndUpdate(id, { roles }, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+    }
+
+    res.status(200).json({ message: "Cập nhật vai trò thành công!", user });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi server", error: error.message });
+  }
+};
+
+// Xóa người dùng
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+    }
+    res.status(200).json({ message: "Xóa người dùng thành công!" });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi server", error: error.message });
   }
 };

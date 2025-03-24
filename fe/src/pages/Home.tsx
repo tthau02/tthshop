@@ -14,7 +14,7 @@ const Home = () => {
   }, []);
 
   const getNewProduct = async () => {
-    const { data } = await instance.get(`/products?_page=2&_limit=8`);
+    const { data } = await instance.get(`/products?_page=1&_limit=10`);
     setProducts(data.docs);
   };
 
@@ -23,8 +23,8 @@ const Home = () => {
       <BannerSlider />
 
       <div className="container max-w-[1300px] mx-auto m-5">
-        <h3 className="mb-3 uppercase font-bold text-[16px] text-red-600">
-          Danh Mục Nổi Bật
+        <h3 className="mb-3 font-semibold text-[22px] text-red-500">
+          Danh mục nổi bật
         </h3>
         <Categories />
         <div className="h-[400px] flex items-center justify-center gap-7">
@@ -39,7 +39,7 @@ const Home = () => {
               <p className="mb-4 text-sm">
                 Máy được trang bị chip M4 thế hệ mới nhất của Apple
               </p>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
+              <button className="bg-red-500 hover:bg-red-600 text-white text-[14px] py-2 px-4 rounded-lg transition-all duration-300">
                 Mua ngay
               </button>
             </div>
@@ -55,20 +55,20 @@ const Home = () => {
               <p className="mb-4 text-sm">
                 Trải nghiệm công nghệ vượt trội với iPhone 16 mới nhất.
               </p>
-              <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
+              <button className="bg-red-500 hover:bg-red-600 text-white text-[14px] py-2 px-4 rounded-lg transition-all duration-300">
                 Mua ngay
               </button>
             </div>
           </div>
         </div>
 
-        <h3 className="mb-3 uppercase font-bold text-[16px] text-red-600">
-          sản phẩm mới nhất
+        <h3 className="mb-3 font-semibold text-[22px] text-red-500">
+          Sản phẩm mới nhất
         </h3>
-        <div className="bg-white p-8 rounded-lg grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="bg-white p-8 rounded-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {products.map((item) => {
             return (
-              <div className="rounded-lg p-4 shadow-sm hover:shadow-lg transition">
+              <div className="rounded-lg p-4 max-h-screen shadow-sm hover:shadow-lg transition-all duration-300">
                 <Link to={`/products/${item._id}`}>
                   <img
                     className="w-full h-48 object-cover rounded-md mb-3"

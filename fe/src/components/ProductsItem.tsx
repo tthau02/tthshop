@@ -4,7 +4,7 @@ import AddToCart from "./common/AddTocart";
 
 const ProductsItem = (props: IProduct) => {
   return (
-    <div className="shadow-md rounded-lg p-3 hover:shadow-lg transition">
+    <div className="shadow-md rounded-lg p-3 hover:shadow-lg transition-all duration-300">
       <Link to={`/products/${props._id}`}>
         <img
           className="w-full h-44 object-cover rounded-md mb-3"

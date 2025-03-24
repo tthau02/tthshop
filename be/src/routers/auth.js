@@ -1,10 +1,24 @@
 import { Router } from "express";
-import { googleLogin, signin, signup } from "../controllers/auth";
+import {
+  deleteUser,
+  getAllUsers,
+  getOneUser,
+  googleLogin,
+  signin,
+  signup,
+  updateUser,
+  updateUserRole,
+} from "../controllers/auth";
 
 const router = Router();
 
 router.post("/signup", signup);
 router.post("/signin", signin);
 router.post("/auth/google", googleLogin);
+router.put("/user/:id", updateUser);
+
+router.get("/users", getAllUsers);
+router.put("/users/:id", updateUserRole);
+router.delete("/users/:id", deleteUser);
 
 export default router;

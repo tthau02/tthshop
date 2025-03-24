@@ -3,7 +3,5 @@
 @tailwind utilities;
 
 body {
-  background-color: theme(
-    "colors.gray.100"
-  ); /* Dùng màu gray-100 từ Tailwind */
+  background-color: theme("colors.gray.100");
 }

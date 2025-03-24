@@ -75,7 +75,7 @@ const Categories = () => {
           return (
             <div
               key={cate._id}
-              className="bg-white overflow-hidden rounded-[10px] relative hover:shadow-2xl transition cursor-pointer flex justify-center items-center"
+              className="bg-white overflow-hidden rounded-[10px] relative hover:shadow-xl transition-all duration-300 cursor-pointer flex justify-center items-center"
               style={{ gridArea }}
               onClick={() => handleCategoryClick(cate._id)}
             >

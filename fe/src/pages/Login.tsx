@@ -63,9 +63,9 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+      <div className="w-[550px] p-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-center text-gray-700">
-          Đăng Nhập
+          Đăng nhập
         </h2>
         <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-4">
@@ -74,10 +74,10 @@ const Login: React.FC = () => {
             </label>
             <input
               type="text"
-              className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-400"
               placeholder="Nhập email"
               {...register("email", {
-                required: "Không được để trống",
+                required: "Không để trống email",
                 pattern: {
                   value: /^\S+@\S+\.\S+$/,
                   message: "Sai định dạng email",
@@ -85,7 +85,9 @@ const Login: React.FC = () => {
               })}
             />
             {errors?.email && (
-              <span className="p-2 text-red-600">{errors?.email?.message}</span>
+              <span className="p-1 text-[14px] text-red-500">
+                {errors?.email?.message}
+              </span>
             )}
           </div>
           <div className="mt-4">
@@ -94,7 +96,7 @@ const Login: React.FC = () => {
             </label>
             <input
               type="password"
-              className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-400"
               placeholder="Nhập mật khẩu"
               {...register("password", {
                 required: "Không để trống mật khẩu",
@@ -105,16 +107,16 @@ const Login: React.FC = () => {
               })}
             />
             {errors?.password && (
-              <span className="p-2 text-red-600">
+              <span className="p-1 text-[14px] text-red-500">
                 {errors?.password?.message}
               </span>
             )}
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 mt-6 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 mt-6 uppercase text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-300"
           >
-            Đăng Nhập
+            Đăng nhập
           </button>
         </form>
         <div className="flex items-center justify-center mt-4">
@@ -123,13 +125,13 @@ const Login: React.FC = () => {
           <span className="w-full border-b border-gray-300"></span>
         </div>
         <div className="flex justify-center mt-4 space-x-4">
-          <button className="flex items-center px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <button className="flex items-center px-4 py-2 text-blue-500 border-2 border-blue-400 rounded-lg hover:bg-slate-100 transition-all duration-300">
             <FaFacebook className="mr-2" />
             Facebook
           </button>
           <button
             onClick={() => googleLogin()}
-            className="flex items-center px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+            className="flex items-center px-4 py-2 border-2 text-red-500 border-red-400 rounded-lg hover:bg-slate-100 transition-all duration-300"
           >
             <FaGoogle className="mr-2" />
             Google
@@ -137,7 +139,7 @@ const Login: React.FC = () => {
         </div>
         <p className="mt-4 text-sm text-center text-gray-600">
           Chưa có tài khoản?{" "}
-          <Link to="/register" className="text-blue-500 hover:underline">
+          <Link to="/register" className="text-red-500 hover:underline">
             Đăng ký
           </Link>
         </p>

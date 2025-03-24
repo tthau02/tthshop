@@ -2,6 +2,7 @@ export default interface IProduct {
   _id: string;
   name: string;
   price: number;
+  slug: string;
   images: string[]; // Mảng các đường dẫn ảnh
   thumbnail: string; // Đường dẫn ảnh chính
   brand?: string;

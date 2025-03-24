@@ -11,7 +11,6 @@ const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { cartItemCount } = useCart();
-
   const handleLogout = () => {
     logout();
     setIsDropdownOpen(false);

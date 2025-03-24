@@ -3,6 +3,8 @@ import instance from "../config/axiosConfig";
 import toast from "react-hot-toast";
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { IoShieldCheckmarkOutline } from "react-icons/io5";
 
 interface Product {
   _id: string;
@@ -41,7 +43,6 @@ const PageCart: React.FC = () => {
   const fetchCart = async () => {
     try {
       const response = await instance.get<CartResponse>(`/cart/${userId}`);
-      console.log(response.data);
       setCartData(response.data);
       setLoading(false);
     } catch (err) {
@@ -73,42 +74,21 @@ const PageCart: React.FC = () => {
   };
 
   const removeCart = async (productId: string) => {
-    toast(
-      (t) => (
-        <div>
-          <p>Bạn có chắc chắn muốn xóa sản phẩm này không?</p>
-          <div className="flex gap-2 mt-2">
-            <button
-              className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-              onClick={async () => {
-                try {
-                  await instance.delete<CartResponse>(
-                    `/cart/remove?userId=${userId}&productId=${productId}`
-                  );
-                  toast.dismiss(t.id);
-                  toast.success("Xóa sản phẩm thành công!");
-                  fetchCart();
-                  fetchCartCount();
-                } catch (err: any) {
-                  toast.error(
-                    err.response?.data?.message || "Không thể xóa sản phẩm"
-                  );
-                }
-              }}
-            >
-              Có
-            </button>
-            <button
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-              onClick={() => toast.dismiss(t.id)}
-            >
-              Không
-            </button>
-          </div>
-        </div>
-      ),
-      { duration: Infinity }
-    );
+    if (!userId) {
+      toast.error("Vui lòng đăng nhập để xóa sản phẩm");
+      return;
+    }
+
+    try {
+      await instance.delete<CartResponse>(
+        `/cart/remove?userId=${userId}&productId=${productId}`
+      );
+      toast.success("Xóa sản phẩm thành công!");
+      fetchCart();
+      fetchCartCount();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Không thể xóa sản phẩm");
+    }
   };
 
   if (loading) {
@@ -140,91 +120,107 @@ const PageCart: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[1050px] bg-white p-6 rounded-md mx-auto m-5 mt-[110px] px-4 py-8 ">
-      <h1 className="text-2xl font-bold mb-6">Giỏ hàng của bạn</h1>
+    <div className="max-w-[750px] mx-auto m-5 mt-[110px] px-4 py-8 ">
+      <h3 className="text-xl font-bold mb-6">Giỏ hàng của bạn</h3>
       {"userId" in cartData.cart && (
-        <div className="mb-6 bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-lg font-semibold">Thông tin khách hàng</h2>
+        <div className="mb-6 bg-white p-4 rounded-lg">
+          <h4 className="font-semibold">Thông tin khách hàng</h4>
           <p>Tên: {cartData.cart.userId.username}</p>
           <p>Email: {cartData.cart.userId.email}</p>
         </div>
       )}
-      <div className="bg-gray-100 shadow-md rounded-lg overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b">
-          <div className="md:col-span-4">Sản phẩm</div>
-          <div className="md:col-span-2 text-center">Giá</div>
-          <div className="md:col-span-2 text-center">Số lượng</div>
-          <div className="md:col-span-2 text-center">Tổng</div>
-          <div className="md:col-span-2 text-center"></div>
-        </div>
-        {!Array.isArray(cartData.cart) &&
-          cartData.cart.items.map((item) => (
-            <div
-              key={item.productId._id}
-              className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b items-center"
-            >
-              <div className="md:col-span-4 flex items-center">
+
+      {!Array.isArray(cartData.cart) &&
+        cartData.cart.items.map((item) => (
+          <div className="shadow-sm bg-white rounded-lg mb-4">
+            <div key={item.productId._id} className="flex justify-between">
+              <div className="flex justify-start p-3">
+                <input type="radio" className="w-4 mb-[60px] mr-2" />
                 <img
                   src={item.productId.thumbnail}
                   alt={item.productId.name}
-                  className="w-16 h-16 object-cover mr-4 rounded"
+                  className="w-24 h-25 object-cover mr-4 rounded"
                 />
-                <span>{item.productId.name}</span>
+                <div className="ml-7">
+                  <h4 className="text-[18px] font-medium text-gray-600">
+                    {item.productId.name}
+                  </h4>
+                  <div className="mt-4">
+                    <span className="text-[17px] text-red-500 font-medium">
+                      {item.productId.price.toLocaleString()}
+                    </span>
+                    <del className="ml-3 text-gray-500">1000</del>
+                  </div>
+                </div>
               </div>
-              <div className="md:col-span-2 text-center">
-                {item.productId.price.toLocaleString()} VNĐ
-              </div>
-              <div className="md:col-span-2 text-center flex items-center justify-center space-x-2">
-                <button
-                  className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                  onClick={() =>
-                    updateQuantity(item.productId._id, item.quantity - 1)
-                  }
-                >
-                  -
-                </button>
-                <span>{item.quantity}</span>
-                <button
-                  className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                  onClick={() =>
-                    updateQuantity(item.productId._id, item.quantity + 1)
-                  }
-                >
-                  +
-                </button>
-              </div>
-              <div className="md:col-span-2 text-center font-semibold">
-                {(item.productId.price * item.quantity).toLocaleString()} VNĐ
-              </div>
-              <div className="md:col-span-2 text-center font-semibold">
-                <button
-                  className="p-2 bg-red-500 text-red-50 rounded-lg text-[15px] hover:bg-red-400"
-                  onClick={() => removeCart(item.productId._id)}
-                >
-                  Xóa
-                </button>
+
+              <div className="flex flex-col gap-2 p-5">
+                <div className="flex justify-end">
+                  <button
+                    className=""
+                    onClick={() => removeCart(item.productId._id)}
+                  >
+                    <FaRegTrashCan />
+                  </button>
+                </div>
+                <div className="flex items-center justify-center space-x-2 mt-5">
+                  <button
+                    className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                    onClick={() =>
+                      updateQuantity(item.productId._id, item.quantity - 1)
+                    }
+                  >
+                    -
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button
+                    className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                    onClick={() =>
+                      updateQuantity(item.productId._id, item.quantity + 1)
+                    }
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             </div>
-          ))}
-      </div>
+            <div className="flex justify-between items-center p-5 mt-3">
+              <div className="flex items-center ml-4">
+                <IoShieldCheckmarkOutline />
+                <Link to="" className="text-[15px] font-normal ml-3">
+                  Bảo vệ toàn diện với bản hành mở rộng
+                </Link>
+              </div>
+              <div>
+                <Link to="" className="text-[15px] font-medium text-red-500">
+                  Chọn gói
+                </Link>
+              </div>
+            </div>
+          </div>
+        ))}
       {cartData.totalAmount && (
-        <div className="mt-6 text-right">
-          <div className="bg-gray-100 p-4 rounded-lg inline-block">
-            <p className="text-lg font-semibold">
-              Tổng cộng:{" "}
-              <span className="text-xl text-blue-600">
-                {cartData.totalAmount.toLocaleString()} VNĐ
+        <div className="shadow-sm bg-white rounded-lg p-5">
+          <div className="flex justify-between items-center">
+            <p className="text-[17px] font-semibold">
+              Tạm tính:{" "}
+              <span className="text-[17px] text-red-600 font-semibold">
+                {cartData.totalAmount.toLocaleString()}đ
               </span>
             </p>
-            <Link
-              to="/products"
-              className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors mr-7"
-            >
-              Tiếp tục mua hàng
-            </Link>
-            <button className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-600 transition-colors">
-              Thanh toán
-            </button>
+            <div>
+              <Link
+                to="/checkout"
+                state={{
+                  cart: cartData.cart,
+                  totalAmount: cartData.totalAmount,
+                }}
+              >
+                <button className=" bg-red-500 text-white px-5 py-3 text-[14px] rounded hover:bg-red-600 transition-colors">
+                  Mua ngay
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       )}

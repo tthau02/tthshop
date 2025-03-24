@@ -23,7 +23,7 @@ const AdminLayout = () => {
         </Link>
         <nav className="mt-6 flex-grow px-4">
           <Link
-            to="/admin"
+            to="/admin/dashboard"
             className="flex items-center py-2.5 px-4 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition duration-300"
           >
             <FaTachometerAlt className="mr-3" /> Dashboard

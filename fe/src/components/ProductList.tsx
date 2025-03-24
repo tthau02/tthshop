@@ -1,11 +1,11 @@
 import IProduct from "../interfaces/products";
-import { ICategory } from "../interfaces/category"; // Import interface danh mục
+import { ICategory } from "../interfaces/category";
 import ProductsItem from "../components/ProductsItem";
 
 interface ProductListProps {
   products: IProduct[];
   searchQuery?: string;
-  selectedCategory?: ICategory | null; // Thêm prop để nhận danh mục
+  selectedCategory?: ICategory | null;
 }
 
 const ProductList: React.FC<ProductListProps> = ({
