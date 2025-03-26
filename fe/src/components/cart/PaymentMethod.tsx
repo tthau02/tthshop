@@ -10,6 +10,7 @@ interface PaymentMethodProps {
   onCheckout: (paymentMethod: string) => void;
   isInfoComplete: boolean;
   loading: boolean;
+  finalTotal?: number; // Tổng tiền từ Checkout
 }
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({

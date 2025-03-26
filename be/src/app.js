@@ -5,6 +5,7 @@ import categoryRouter from "./routers/category.js";
 import cartRouter from "./routers/cart.js";
 import orderRouter from "./routers/order.js";
 import dashboardRouter from "./routers/dashboard.js";
+import paymentRouter from "./routers/payment.js";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
@@ -62,6 +63,7 @@ app.use("/api", categoryRouter);
 app.use("/api", cartRouter);
 app.use("/api", orderRouter);
 app.use("/api", dashboardRouter);
+app.use("/api/payment", paymentRouter);
 
 // Kết nối MongoDB
 connectDB();

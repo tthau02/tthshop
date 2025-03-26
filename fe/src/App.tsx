@@ -24,6 +24,7 @@ import EditProfile from "./pages/profile/EditProfile";
 import PolicyPage from "./pages/PolicyPage";
 import BlogPage from "./pages/BlogPage";
 import ContactPage from "./pages/ContactPage";
+import PaymentResult from "./components/cart/PaymentResult";
 
 function App() {
   const clientID = import.meta.env.VITE_CLIENT_ID;
@@ -48,6 +49,7 @@ function App() {
 
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="payment-result" element={<PaymentResult />} />
           </Route>
 
           <Route element={<PrivateRoute />}>

@@ -43,34 +43,29 @@ const Checkout = () => {
     totalAmount: 0,
   };
   const { user } = useAuth();
-  const { fetchCartCount } = useCart(); // Để cập nhật số lượng giỏ hàng
+  const { fetchCartCount } = useCart();
   const [isInfoComplete, setIsInfoComplete] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Tính phí vận chuyển (giả định)
   const shippingFee = 15000;
   const finalTotal = totalAmount + shippingFee;
 
-  // Kiểm tra thông tin người dùng có đầy đủ không
   const checkInfoComplete = (userData: User) => {
     const requiredFields = ["username", "email", "phone", "address"];
     const isComplete = requiredFields.every((field) => userData[field]);
     setIsInfoComplete(isComplete);
   };
 
-  // Callback khi cập nhật thông tin thành công
   const handleUpdateSuccess = (updatedUser: User) => {
     checkInfoComplete(updatedUser);
   };
 
-  // Kiểm tra thông tin khi component mount
   useEffect(() => {
     if (user) {
       checkInfoComplete(user);
     }
   }, [user]);
 
-  // Xử lý thanh toán
   const handleCheckout = async (paymentMethod: string) => {
     if (!isInfoComplete) {
       toast.error("Vui lòng điền đầy đủ thông tin trước khi thanh toán!");
@@ -78,7 +73,6 @@ const Checkout = () => {
     }
     setLoading(true);
     try {
-      // Chuẩn bị dữ liệu đơn hàng
       const orderData = {
         userId: user?._id,
         items: cart.items.map((item: CartItem) => ({
@@ -98,10 +92,24 @@ const Checkout = () => {
       };
 
       // Gửi request tạo đơn hàng
-      await instance.post("/orders", orderData);
-      toast.success("Đặt hàng thành công!");
-      fetchCartCount();
-      navigate("/");
+      const orderResponse = await instance.post("/orders", orderData);
+      const orderId = orderResponse.data?._id;
+
+      if (paymentMethod === "vnpay") {
+        const paymentResponse = await instance.get("/payment/create_payment", {
+          params: {
+            amount: finalTotal,
+            orderId: orderId,
+          },
+        });
+
+        const { paymentUrl } = paymentResponse.data;
+        window.location.href = paymentUrl;
+      } else {
+        toast.success("Đặt hàng thành công!");
+        fetchCartCount();
+        navigate("/");
+      }
     } catch (error: any) {
       console.error("Checkout Error:", error);
       toast.error(error.response?.data?.message || "Không thể thanh toán");
@@ -137,6 +145,7 @@ const Checkout = () => {
             onCheckout={handleCheckout}
             isInfoComplete={isInfoComplete}
             loading={loading}
+            finalTotal={finalTotal}
           />
         </div>
       </div>
