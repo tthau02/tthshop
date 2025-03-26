@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import instance from "../config/axiosConfig";
 import toast from "react-hot-toast";
 import { useCart } from "../context/CartContext";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { IoShieldCheckmarkOutline } from "react-icons/io5";
 
@@ -112,9 +112,16 @@ const PageCart: React.FC = () => {
     (Array.isArray(cartData.cart) && cartData.cart.length === 0)
   ) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-4">Giỏ hàng của bạn</h1>
-        <p className="text-gray-600">Giỏ hàng hiện đang trống</p>
+      <div className="container mx-auto px-4 py-8 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-gray-600 mb-6">Giỏ hàng hiện đang trống</p>
+          <NavLink
+            to="/products"
+            className="inline-block bg-red-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-red-400 transition duration-300"
+          >
+            Mua hàng ngay
+          </NavLink>
+        </div>
       </div>
     );
   }

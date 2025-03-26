@@ -146,3 +146,60 @@ export const updateOrderStatus = async (req, res) => {
     });
   }
 };
+
+export const cancelOrder = async (req, res) => {
+  const { orderId } = req.params;
+  const userId = req.user.id; // Lấy ID người dùng từ token
+
+  try {
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: "Đơn hàng không tồn tại" });
+    }
+
+    if (order.status !== "pending" && order.status !== "processing") {
+      return res.status(400).json({
+        message: "Chỉ có thể hủy đơn hàng khi đang chờ xử lý hoặc đang xử lý",
+      });
+    }
+
+    order.status = "cancelled";
+    order.cancelledBy = userId;
+    order.cancelledAt = new Date();
+
+    await order.save();
+
+    res.json({ message: "Hủy đơn hàng thành công", order });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi server", error });
+  }
+};
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Vui lòng đăng nhập lại." });
+    }
+
+    let query = { userId };
+    if (req.query.status && req.query.status !== "all") {
+      query.status = req.query.status;
+    }
+
+    const orders = await Order.find(query)
+      .populate("items.productId", "name price thumbnail")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: "Lấy danh sách đơn hàng thành công!",
+      orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi server khi lấy danh sách đơn hàng",
+      error: error.message,
+    });
+  }
+};

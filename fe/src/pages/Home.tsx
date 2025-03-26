@@ -31,7 +31,7 @@ const Home = () => {
           <div className="relative w-[660px] h-[300px]">
             <img
               className="w-full h-full object-cover rounded-lg"
-              src="https://nylon.com.sg/wp-content/uploads/2025/03/MacBook-Air-M4-NYLON-Banner-scaled.jpg"
+              src="/src/assets/image/banner3.jpg"
             />
             <div className="absolute inset-0 bg-black opacity-40 rounded-lg" />
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-4">
@@ -47,7 +47,7 @@ const Home = () => {
           <div className="relative w-[660px] h-[300px]">
             <img
               className="w-full h-full object-cover rounded-lg"
-              src="https://medialab.com.vn/wp-content/uploads/2024/09/iphone-16-Pro-Max-Media-LAB-cover.jpg"
+              src="/src/assets/image/banner2.jpg"
             />
             <div className="absolute inset-0 bg-black opacity-40 rounded-lg" />
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-4">

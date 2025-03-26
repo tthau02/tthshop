@@ -7,7 +7,7 @@ import {
   FaUserCircle,
   FaHistory,
 } from "react-icons/fa";
-import EditProfile from "./EditProfile";
+import { Link, Outlet } from "react-router-dom";
 
 const Profile = () => {
   const user = {
@@ -41,22 +41,22 @@ const Profile = () => {
         </div>
         <ul className="space-y-2">
           <li>
-            <a
-              href="#"
+            <Link
+              to="edit-profile"
               className="flex items-center p-2 text-red-500 font-semibold bg-red-100 rounded"
             >
               <FaUserCircle className="w-5 h-5 mr-2" />
               Tài khoản của bạn
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="#"
+            <Link
+              to="order-history"
               className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded"
             >
               <FaHistory className="w-5 h-5 mr-2" />
               Lịch sử mua hàng
-            </a>
+            </Link>
           </li>
           <li>
             <a
@@ -96,7 +96,9 @@ const Profile = () => {
           </li>
         </ul>
       </div>
-      <EditProfile />
+      <div className="flex-1 p-6">
+        <Outlet />
+      </div>
     </div>
   );
 };

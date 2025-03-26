@@ -49,6 +49,15 @@ const orderSchema = new Schema(
       phone: { type: String, required: true },
       address: { type: String, required: true },
     },
+    cancelledBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null, // Nếu null, nghĩa là đơn chưa bị hủy
+    },
+    cancelledAt: {
+      type: Date,
+      default: null, // Thời gian hủy đơn
+    },
   },
   { timestamps: true, versionKey: false }
 );

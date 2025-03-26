@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../context/AuthContext";
-import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 import {
   FaUser,
   FaPhone,
@@ -11,7 +10,7 @@ import {
   FaSave,
   FaUpload,
 } from "react-icons/fa";
-import instance from "../config/axiosConfig";
+import instance from "../../config/axiosConfig";
 
 const EditProfile = () => {
   const { user, logout, login } = useAuth(); // Gọi useAuth ở top level
@@ -99,7 +98,7 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="flex-1 p-6">
+    <>
       <h4 className="font-medium text-lg mb-4">Cập nhật thông tin tài khoản</h4>
       <div className="bg-white rounded-lg shadow-md p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -270,7 +269,7 @@ const EditProfile = () => {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 };
 

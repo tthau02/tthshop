@@ -4,18 +4,19 @@ const BannerSlider = () => {
   const slides = [
     {
       id: 1,
-      image:
-        "https://happyphone.vn/wp-content/uploads/2024/09/Banner-Iphone-16.webp",
+      image: "/src/assets/image/banner1.jpeg",
     },
     {
       id: 2,
-      image:
-        "https://shopdunk.com/images/thumbs/0022013_banner%20iphone%2015%20pro%20max%20TH_PC_1600.jpeg",
+      image: "/src/assets/image/banner2.jpg",
     },
     {
       id: 3,
-      image:
-        "https://www.homecredit.vn/static/cdf3446968e365f4f8fbc9266010e77a/ab7c8/mua_tra_gop_iphone_16_banner_74273b74f0.webp",
+      image: "/src/assets/image/banner5.webp",
+    },
+    {
+      id: 4,
+      image: "/src/assets/image/banner4.webp",
     },
   ];
 

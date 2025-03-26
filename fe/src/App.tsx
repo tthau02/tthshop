@@ -14,11 +14,16 @@ import PrivateRoute from "./components/layout/PrivateRoute";
 import CartPage from "./pages/CartPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile/Profile";
 import Checkout from "./pages/Checkout";
 import OrdersContent from "./pages/admin/orders/OrdersContent";
 import UsersContent from "./pages/admin/users/UsersContent";
 import DashboardContent from "./pages/admin/DashboardContent";
+import OrderHistoryContent from "./pages/profile/OrderHistoryContent";
+import EditProfile from "./pages/profile/EditProfile";
+import PolicyPage from "./pages/PolicyPage";
+import BlogPage from "./pages/BlogPage";
+import ContactPage from "./pages/ContactPage";
 
 function App() {
   const clientID = import.meta.env.VITE_CLIENT_ID;
@@ -30,12 +35,16 @@ function App() {
             <Route index element={<Home />} />
             <Route path="products" element={<ProductsPage />} />
             <Route path="products/:id" element={<ProductDetailPage />} />
-            <Route path="sale" element={<h1>Khuyến mãi</h1>} />
-            <Route path="contact" element={<h1>lien he</h1>} />
-            <Route path="profile" element={<Profile />} />
-
+            <Route path="policy" element={<PolicyPage />} />
+            <Route path="blog" element={<BlogPage />} />
+            <Route path="contact" element={<ContactPage />} />
             <Route path="register" element={<Register />} />
             <Route path="login" element={<Login />} />
+
+            <Route path="profile" element={<Profile />}>
+              <Route path="edit-profile" element={<EditProfile />} />
+              <Route path="order-history" element={<OrderHistoryContent />} />
+            </Route>
 
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<Checkout />} />

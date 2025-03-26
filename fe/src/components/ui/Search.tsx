@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "../../config/axiosConfig";
 import { Link } from "react-router-dom";
+import { IoSearch } from "react-icons/io5";
 
 interface IProduct {
   _id: string;
@@ -49,11 +50,10 @@ const Search = () => {
 
   const handleSearch = () => {
     if (query) {
-      navigate(`/products?q=${encodeURIComponent(query)}`); // Chuyển hướng với từ khóa
+      navigate(`/products?q=${encodeURIComponent(query)}`);
     }
   };
 
-  // Xử lý nhấn Enter
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && query) {
       handleSearch();
@@ -64,23 +64,23 @@ const Search = () => {
     <div className="ml-10 flex items-center relative">
       <input
         type="text"
-        placeholder="Search"
+        placeholder="Bạn cần tìm gì?"
         value={query}
         onChange={handleInputChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-        onKeyPress={handleKeyPress} // Thêm sự kiện Enter
-        className="p-2 text-[14px] rounded-l-lg w-[350px] bg-gray-800 text-white border-none focus:outline-none focus:ring-2 focus:ring-red-500"
+        onKeyPress={handleKeyPress}
+        className="p-2 w-[460px] text-[14px] rounded-lg bg-gray-800 text-white border-none focus:outline-none focus:ring-2 focus:ring-red-500"
       />
       <button
         onClick={handleSearch}
-        className="p-2 rounded-r-lg text-white bg-red-500 text-[14px] hover:bg-red-600 transition-colors"
+        className="absolute right-0 top-0 h-full p-2 text-white bg-transparent hover:text-red-500 transition-colors"
       >
-        Search
+        <IoSearch className="text-xl" />
       </button>
 
       {isFocused && suggestions.length > 0 && (
-        <div className="absolute top-10 left-0 w-[350px] bg-white shadow-lg rounded-lg z-10 max-h-64 overflow-y-auto">
+        <div className="absolute top-10 left-0 w-[460px] bg-white shadow-lg rounded-lg z-10 max-h-64 overflow-y-auto">
           {suggestions.map((product) => (
             <Link
               key={product._id}
