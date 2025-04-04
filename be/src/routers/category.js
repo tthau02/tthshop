@@ -6,7 +6,7 @@ import {
   getCategoryName,
   removeCate,
   updateCategory,
-} from "../controllers/category";
+} from "../controllers/category.js";
 import upload from "../middlewares/upload.js";
 
 const router = Router();
