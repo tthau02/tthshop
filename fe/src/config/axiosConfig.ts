@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
 });
 
 instance.interceptors.request.use(
@@ -14,11 +14,12 @@ instance.interceptors.request.use(
     ) {
       config.headers.Authorization = `Bearer ${token}`;
     } else {
-      delete config.headers.Authorization;
+      delete config.headers.Authorization; // Xóa Authorization nếu không có token hoặc là endpoint auth
     }
 
+    // Xử lý Content-Type cho FormData
     if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"];
+      delete config.headers["Content-Type"]; // Để browser tự đặt Content-Type cho FormData
     } else {
       config.headers["Content-Type"] = "application/json";
     }
@@ -28,6 +29,7 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Interceptor cho response (tuỳ chọn, để xử lý lỗi tập trung)
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
