@@ -8,7 +8,7 @@ import {
   signup,
   updateUser,
   updateUserRole,
-} from "../controllers/auth";
+} from "../controllers/auth.js";
 
 const router = Router();
 

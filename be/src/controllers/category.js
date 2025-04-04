@@ -1,5 +1,5 @@
-import Product from "../models/product";
-import Category from "../models/category";
+import Product from "../models/product.js";
+import Category from "../models/category.js";
 import { getBaseUrl } from "../config/server.js";
 import Joi from "joi";
 

@@ -1,16 +1,11 @@
-import User from "../models/User.js";
-import Order from "../models/Order.js";
-import Product from "../models/Product.js";
+import User from "../models/user.js";
+import Order from "../models/order.js";
+import Product from "../models/product.js";
 
 export const getDashboardStats = async (req, res) => {
   try {
-    // Tổng số người dùng
     const totalUsers = await User.countDocuments();
-
-    // Tổng số đơn hàng
     const totalOrders = await Order.countDocuments();
-
-    // Tổng doanh thu (tổng totalAmount của tất cả đơn hàng)
     const totalRevenue = await Order.aggregate([
       {
         $group: {
@@ -19,11 +14,7 @@ export const getDashboardStats = async (req, res) => {
         },
       },
     ]);
-
-    // Tổng số sản phẩm
     const totalProducts = await Product.countDocuments();
-
-    // Thống kê đơn hàng theo trạng thái
     const ordersByStatus = await Order.aggregate([
       {
         $group: {
@@ -33,7 +24,6 @@ export const getDashboardStats = async (req, res) => {
       },
     ]);
 
-    // Thống kê người dùng theo vai trò
     const usersByRole = await User.aggregate([
       {
         $group: {

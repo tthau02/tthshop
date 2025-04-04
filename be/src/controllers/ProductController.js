@@ -1,5 +1,5 @@
 import Joi from "joi";
-import Product from "../models/product";
+import Product from "../models/product.js";
 import { getBaseUrl } from "../config/server.js";
 
 const productsSchema = Joi.object({

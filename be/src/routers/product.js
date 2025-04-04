@@ -7,9 +7,8 @@ import {
   removeProduct,
   searchProducts,
   updateProduct,
-} from "../controllers/ProductController";
-import { checkAuth } from "../middlewares/checkAuth";
-import upload from "../middlewares/upload";
+} from "../controllers/ProductController.js";
+import upload from "../middlewares/upload.js";
 
 const router = Router();
 
