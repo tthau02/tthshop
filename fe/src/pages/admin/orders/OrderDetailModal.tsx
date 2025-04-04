@@ -1,53 +1,10 @@
 import { FaTimes } from "react-icons/fa";
-
-interface User {
-  username: string;
-  email: string;
-  phone: string;
-  address: string;
-}
-
-interface Product {
-  name: string;
-  price: number;
-  thumbnail: string;
-}
-
-interface OrderItem {
-  productId: Product;
-  quantity: number;
-  price: number;
-}
-
-interface ShippingAddress {
-  fullName: string;
-  email: string;
-  phone: string;
-  address: string;
-}
-
-interface Order {
-  _id: string;
-  userId: User;
-  items: OrderItem[];
-  totalAmount: number;
-  shippingFee: number;
-  paymentMethod: string;
-  status: string;
-  createdAt: string;
-  shippingAddress: ShippingAddress;
-}
-
-interface OrderDetailModalProps {
-  order: Order;
-  onClose: () => void;
-}
+import { Order, OrderDetailModalProps } from "../../../interfaces/order";
 
 const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   order,
   onClose,
 }) => {
-  // Hàm chuyển đổi trạng thái sang tiếng Việt
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "pending":
@@ -65,7 +22,6 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
     }
   };
 
-  // Hàm chuyển đổi phương thức thanh toán sang tiếng Việt
   const getPaymentMethodLabel = (method: string) => {
     switch (method) {
       case "cod":
@@ -117,7 +73,6 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           </div>
         </div>
 
-        {/* Danh sách sản phẩm */}
         <div className="mb-6">
           <h4 className="text-md font-medium text-gray-700 mb-2">Sản phẩm</h4>
           <div className="border rounded-md p-4 bg-gray-50">
@@ -146,7 +101,6 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
           </div>
         </div>
 
-        {/* Thông tin đơn hàng */}
         <div className="mb-6">
           <h4 className="text-md font-medium text-gray-700 mb-2">
             Thông tin đơn hàng

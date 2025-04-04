@@ -28,7 +28,7 @@ const Header: React.FC = () => {
     } else if (option === "profile") {
       navigate("/profile");
     } else if (option === "orders") {
-      navigate("/orders");
+      navigate("profile/order-history");
     }
   };
 

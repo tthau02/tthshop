@@ -8,7 +8,7 @@ interface FilterSidebarProps {
   setSelectedCategory: (category: ICategory | null) => void;
   priceRange: number;
   setPriceRange: (price: number) => void;
-  setProducts: (products: IProduct[]) => void; // Thêm prop để truyền sản phẩm lên cha
+  setProducts: (products: IProduct[]) => void;
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
@@ -16,7 +16,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   setSelectedCategory,
   priceRange,
   setPriceRange,
-  setProducts, // Nhận prop từ cha
+  setProducts,
 }) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
 
@@ -63,13 +63,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
       </h4>
       <input
         type="range"
-        min="0"
-        max="1000"
+        min="200"
+        max="10000"
         value={priceRange}
         onChange={(e) => setPriceRange(Number(e.target.value))}
         className="w-full"
       />
-      <p>Giá tối đa: {priceRange} $</p>
+      <p>Giá tối đa: {priceRange} đ</p>
     </aside>
   );
 };

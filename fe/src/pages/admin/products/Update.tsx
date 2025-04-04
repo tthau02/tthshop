@@ -18,23 +18,17 @@ const Update = () => {
   } = useForm<ProductInput>({ mode: "onChange" });
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [existingImages, setExistingImages] = useState<string[]>([]); // Ảnh hiện tại từ backend
+  const [existingImages, setExistingImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Lấy dữ liệu sản phẩm và danh mục khi component mount
   useEffect(() => {
     const fetchProductAndCategories = async () => {
       try {
-        // Lấy dữ liệu sản phẩm
         const productRes = await instance.get(`/products/${id}`);
         const productData = productRes.data;
-        reset(productData); // Điền dữ liệu vào form
-
-        // Lấy danh sách ảnh hiện tại
+        reset(productData);
         setExistingImages(productData.images || []);
-        setPreviewImages(productData.images || []); // Hiển thị ảnh hiện tại trong preview
-
-        // Lấy danh mục
+        setPreviewImages(productData.images || []);
         const categoryRes = await instance.get("/categores");
         setCategories(categoryRes.data);
       } catch (error) {
@@ -44,23 +38,20 @@ const Update = () => {
     fetchProductAndCategories();
   }, [id, reset]);
 
-  // Xử lý khi người dùng chọn ảnh mới
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       const newImageUrls = Array.from(files).map((file) =>
         URL.createObjectURL(file)
       );
-      setPreviewImages((prev) => [...prev, ...newImageUrls]); // Thêm ảnh mới vào preview
+      setPreviewImages((prev) => [...prev, ...newImageUrls]);
     }
   };
 
-  // Xóa ảnh khỏi preview
   const removeImage = (index: number) => {
     setPreviewImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Xử lý submit form
   const onSubmit = async (data: ProductInput) => {
     try {
       setLoading(true);
@@ -69,18 +60,14 @@ const Update = () => {
       formData.append("price", data.price.toString());
       formData.append("brand", data.brand || "");
       formData.append("quantity", data.quantity?.toString() || "0");
-      formData.append("categoryId", data.categoryId);
+      formData.append("categoryId", JSON.stringify(data.categoryId));
       formData.append("description", data.description || "");
-
-      // Thêm ảnh hiện tại (nếu không bị xóa)
       const remainingExistingImages = existingImages.filter((img) =>
         previewImages.includes(img)
       );
       remainingExistingImages.forEach((img) =>
         formData.append("existingImages[]", img)
       );
-
-      // Thêm ảnh mới từ input file
       const fileInput = document.querySelector(
         'input[name="images"]'
       ) as HTMLInputElement;

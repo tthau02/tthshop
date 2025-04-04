@@ -13,9 +13,8 @@ import {
 import instance from "../../config/axiosConfig";
 
 const EditProfile = () => {
-  const { user, logout, login } = useAuth(); // Gọi useAuth ở top level
+  const { user, login } = useAuth();
 
-  // Khởi tạo react-hook-form
   const {
     register,
     handleSubmit,
@@ -31,12 +30,10 @@ const EditProfile = () => {
     },
   });
 
-  // State để quản lý ảnh đại diện preview
   const [avatarPreview, setAvatarPreview] = React.useState(
     user?.image || "https://via.placeholder.com/100"
   );
 
-  // Điền dữ liệu người dùng vào form khi component mount
   useEffect(() => {
     if (user) {
       setValue("fullName", user.username || "");
@@ -53,7 +50,7 @@ const EditProfile = () => {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setValue("avatar", file);
+      setValue("avatar", file as any);
       const imageUrl = URL.createObjectURL(file);
       setAvatarPreview(imageUrl);
     }
@@ -81,8 +78,11 @@ const EditProfile = () => {
       login(updatedUser);
 
       alert("Cập nhật thông tin thành công!");
-    } catch (error) {
-      console.error("Lỗi khi cập nhật:", error.response?.data || error.message);
+    } catch (error: unknown) {
+      console.error(
+        "Lỗi khi cập nhật:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
       alert("Có lỗi xảy ra khi cập nhật thông tin!");
     }
   };

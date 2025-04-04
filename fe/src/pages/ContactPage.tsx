@@ -1,24 +1,4 @@
-import React, { useState } from "react";
-
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Thêm logic gửi dữ liệu form (ví dụ: gửi qua API)
-    setFormData({ name: "", email: "", message: "" });
-  };
-
   return (
     <div className="container w-[1300px] m-auto mt-[5%]">
       <main className="container mx-auto px-4 py-12">
@@ -28,7 +8,7 @@ const ContactPage = () => {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Gửi Tin Nhắn Cho Chúng Tôi
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
@@ -40,11 +20,8 @@ const ContactPage = () => {
                   type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
-                  onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập họ và tên của bạn"
-                  required
                 />
               </div>
               <div>
@@ -58,11 +35,8 @@ const ContactPage = () => {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập email của bạn"
-                  required
                 />
               </div>
               <div>
@@ -75,12 +49,9 @@ const ContactPage = () => {
                 <textarea
                   id="message"
                   name="message"
-                  value={formData.message}
-                  onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows="5"
+                  rows={5}
                   placeholder="Nhập tin nhắn của bạn"
-                  required
                 />
               </div>
               <button

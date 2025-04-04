@@ -32,8 +32,30 @@ const AddToCart = ({ productId }: { productId: string }) => {
   };
 
   return (
-    <Button type="primary" danger loading={loading} onClick={handleAddToCart}>
-      {loading ? "Đang thêm..." : "+Add"}
+    <Button
+      loading={loading}
+      onClick={handleAddToCart}
+      style={{
+        width: "100%",
+        color: "#fff",
+        fontWeight: "600",
+        backgroundColor: loading ? "#9CA3AF" : "#DC2626",
+        padding: "0.5rem 1.5rem",
+        borderRadius: "0 0 0.5rem 0.5rem",
+        transition: "background-color 0.2s ease-in-out",
+        cursor: loading ? "not-allowed" : "pointer",
+        border: "none",
+      }}
+      onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+        if (!loading)
+          (e.target as HTMLElement).style.backgroundColor = "#B91C1C";
+      }}
+      onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
+        if (!loading)
+          (e.target as HTMLElement).style.backgroundColor = "#DC2626";
+      }}
+    >
+      {loading ? "Đang thêm..." : "Thêm vào giỏ hàng"}
     </Button>
   );
 };

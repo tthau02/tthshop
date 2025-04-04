@@ -127,7 +127,13 @@ const ListCategory = () => {
                 <td className="py-3 px-4">
                   {item.image ? (
                     <img
-                      src={item.image}
+                      src={
+                        typeof item.image === "string"
+                          ? item.image
+                          : item.image && item.image[0]
+                          ? URL.createObjectURL(item.image[0])
+                          : undefined
+                      }
                       alt={item.categoryName}
                       className="w-12 h-12 object-cover rounded"
                     />
@@ -233,13 +239,11 @@ const ListCategory = () => {
                 {...register("desc")}
               />
               <div className="mb-3">
-                {editCategory.image && (
-                  <img
-                    src={editCategory.image}
-                    alt={editCategory.categoryName}
-                    className="w-24 h-24 object-cover rounded mb-2"
-                  />
-                )}
+                <img
+                  src={""}
+                  alt={editCategory.categoryName}
+                  className="w-24 h-24 object-cover rounded mb-2"
+                />
                 <input
                   type="file"
                   accept="image/*"

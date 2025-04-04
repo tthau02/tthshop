@@ -68,7 +68,7 @@ const Home = () => {
         <div className="bg-white p-8 rounded-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {products.map((item) => {
             return (
-              <div className="rounded-lg p-4 max-h-screen shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="shadow-md rounded-tl-lg rounded-tr-lg p-3 hover:border-red-600 transition-all duration-300 relative group border border-transparent">
                 <Link to={`/products/${item._id}`}>
                   <img
                     className="w-full h-48 object-cover rounded-md mb-3"
@@ -89,8 +89,13 @@ const Home = () => {
                     <span className="text-lg font-bold text-red-500">
                       {item.price.toLocaleString()}₫
                     </span>
-                    <AddToCart productId={item._id} />
+                    <span className="text-sm text-red-500">
+                      Còn hàng: {item.quantity}
+                    </span>
                   </div>
+                </div>
+                <div className="absolute left-0 right-0 bottom-[-2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center">
+                  <AddToCart productId={item._id} />
                 </div>
               </div>
             );

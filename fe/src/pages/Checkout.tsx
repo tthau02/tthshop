@@ -21,12 +21,6 @@ interface CartItem {
   quantity: number;
 }
 
-interface Cart {
-  _id: string;
-  userId: { _id: string; username: string; email: string };
-  items: CartItem[];
-}
-
 interface User {
   _id: string;
   username: string;
@@ -51,7 +45,12 @@ const Checkout = () => {
   const finalTotal = totalAmount + shippingFee;
 
   const checkInfoComplete = (userData: User) => {
-    const requiredFields = ["username", "email", "phone", "address"];
+    const requiredFields: (keyof User)[] = [
+      "username",
+      "email",
+      "phone",
+      "address",
+    ];
     const isComplete = requiredFields.every((field) => userData[field]);
     setIsInfoComplete(isComplete);
   };

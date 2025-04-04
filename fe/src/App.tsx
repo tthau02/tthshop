@@ -25,6 +25,7 @@ import PolicyPage from "./pages/PolicyPage";
 import BlogPage from "./pages/BlogPage";
 import ContactPage from "./pages/ContactPage";
 import PaymentResult from "./components/cart/PaymentResult";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const clientID = import.meta.env.VITE_CLIENT_ID;
@@ -65,7 +66,7 @@ function App() {
             </Route>
           </Route>
 
-          <Route path="*" element={<h1>Not Fount</h1>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
       </GoogleOAuthProvider>

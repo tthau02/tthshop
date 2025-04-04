@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { Card, Row, Col } from "antd";
 import {
@@ -14,7 +13,6 @@ import {
 import { Pie, Bar } from "react-chartjs-2";
 import instance from "../../config/axiosConfig";
 
-// Đăng ký các thành phần cần thiết cho Chart.js
 ChartJS.register(
   ArcElement,
   Tooltip,

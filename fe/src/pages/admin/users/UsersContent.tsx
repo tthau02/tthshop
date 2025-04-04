@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import axios from "axios";
 import toast from "react-hot-toast";
 import UpdateUserRoleModal from "./UpdateUserRoleModal";
 import instance from "../../../config/axiosConfig";

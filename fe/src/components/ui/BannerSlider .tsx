@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+
+interface Slide {
+  id: number;
+  image: string;
+  caption?: string;
+}
+
 const BannerSlider = () => {
-  const slides = [
+  const slideData: Slide[] = [
     {
       id: 1,
       image: "/src/assets/image/banner1.jpeg",
@@ -23,12 +30,12 @@ const BannerSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = () => {
-    const newIndex = (currentIndex - 1 + slides.length) % slides.length;
+    const newIndex = (currentIndex - 1 + slideData.length) % slideData.length;
     setCurrentIndex(newIndex);
   };
 
   const nextSlide = () => {
-    const newIndex = (currentIndex + 1) % slides.length;
+    const newIndex = (currentIndex + 1) % slideData.length;
     setCurrentIndex(newIndex);
   };
 
@@ -46,12 +53,12 @@ const BannerSlider = () => {
         className="flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {slides.map((slide) => (
+        {slideData.map((slide) => (
           <div key={slide.id} className="relative min-w-full h-full">
             <img
               src={slide.image}
-              alt={slide.caption}
-              className="w-full h-[500px]"
+              alt={slide.caption || `Slide ${slide.id}`}
+              className="w-full h-[500px] object-cover"
             />
           </div>
         ))}
@@ -73,7 +80,7 @@ const BannerSlider = () => {
 
       {/* Indicators */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {slides.map((_, index) => (
+        {slideData.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}

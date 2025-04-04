@@ -8,7 +8,8 @@ interface RelatedProduct {
   name: string;
   price: number;
   thumbnail: string;
-  decsription: string;
+  description: string;
+  quantity: number;
 }
 
 interface RelatedProductsProps {
@@ -44,32 +45,37 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
   }
 
   return (
-    <section className="my-14 bg-white rounded-md p-5">
-      <h2 className="text-2xl font-bold mb-6">Sản phẩm liên quan</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {relatedProducts.slice(0, 8).map((item) => (
-          <div
-            key={item._id}
-            className="shadow-md rounded-lg p-4 hover:shadow-lg transition"
-          >
+    <section className="bg-white p-8 rounded-lg grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      {relatedProducts.map((item) => {
+        return (
+          <div className="shadow-md rounded-tl-lg rounded-tr-lg p-3 hover:border-red-600 transition-all duration-300 relative group border border-transparent">
             <Link to={`/products/${item._id}`}>
               <img
+                className="w-full h-48 object-cover rounded-md mb-3"
                 src={item.thumbnail}
                 alt={item.name}
-                className="w-full h-48 object-cover rounded-md mb-3"
               />
             </Link>
-            <p>{item.decsription}</p>
-            <h3 className="text-lg font-semibold">{item.name}</h3>
-            <div className="flex justify-between items-center mt-3">
-              <p className="text-red-500 font-semibold">
-                {item.price.toLocaleString()}₫
-              </p>
+            <div className="p-2">
+              <Link to={`/products/${item._id}`}>
+                <h3 className="font-semibold text-gray-800 ">{item.name}</h3>
+              </Link>
+              <p className="mt-2 text-gray-600 text-sm">{item.description}</p>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-lg font-bold text-red-500">
+                  {item.price.toLocaleString()}₫
+                </span>
+                <span className="text-sm text-red-500">
+                  Còn hàng: {item.quantity}
+                </span>
+              </div>
+            </div>
+            <div className="absolute left-0 right-0 bottom-[-2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center">
               <AddToCart productId={item._id} />
             </div>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </section>
   );
 };

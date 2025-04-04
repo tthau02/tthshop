@@ -4,43 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import UpdateOrderStatusModal from "./UpdateOrderStatusModal";
 import OrderDetailModal from "./OrderDetailModal";
-
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-}
-
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  thumbnail: string;
-}
-
-interface OrderItem {
-  productId: Product;
-  quantity: number;
-  price: number;
-}
-
-interface Order {
-  _id: string;
-  userId: User | null; // userId có thể là null
-  items: OrderItem[];
-  totalAmount: number;
-  shippingFee: number;
-  paymentMethod: string;
-  status: string;
-  createdAt: string;
-}
-
-interface Pagination {
-  currentPage: number;
-  totalPages: number;
-  totalOrders: number;
-  limit: number;
-}
+import { Order, Pagination } from "../../../interfaces/order"; // Điều chỉnh đường dẫn
 
 const OrdersContent = () => {
   const [orders, setOrders] = useState<Order[]>([]);
