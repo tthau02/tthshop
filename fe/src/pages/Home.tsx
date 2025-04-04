@@ -5,6 +5,8 @@ import instance from "../config/axiosConfig";
 import { Link } from "react-router-dom";
 import AddToCart from "../components/common/AddTocart";
 import Categories from "../components/Categories";
+import banner2 from "../../public/image/banner2.jpg";
+import banner3 from "../../public/image/banner3.jpg";
 
 const Home = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -31,7 +33,7 @@ const Home = () => {
           <div className="relative w-[660px] h-[300px]">
             <img
               className="w-full h-full object-cover rounded-lg"
-              src="/src/assets/image/banner3.jpg"
+              src={banner3}
             />
             <div className="absolute inset-0 bg-black opacity-40 rounded-lg" />
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-4">
@@ -47,7 +49,7 @@ const Home = () => {
           <div className="relative w-[660px] h-[300px]">
             <img
               className="w-full h-full object-cover rounded-lg"
-              src="/src/assets/image/banner2.jpg"
+              src={banner2}
             />
             <div className="absolute inset-0 bg-black opacity-40 rounded-lg" />
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-4">

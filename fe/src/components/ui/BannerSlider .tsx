@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
-
+import banner1 from "../../../public/image/banner1.jpeg";
+import banner2 from "../../../public/image/banner2.jpg";
+import banner3 from "../../../public/image/banner5.webp";
+import banner4 from "../../../public/image/banner4.webp";
 interface Slide {
   id: number;
   image: string;
@@ -11,19 +14,19 @@ const BannerSlider = () => {
   const slideData: Slide[] = [
     {
       id: 1,
-      image: "/src/assets/image/banner1.jpeg",
+      image: banner1,
     },
     {
       id: 2,
-      image: "/src/assets/image/banner2.jpg",
+      image: banner2,
     },
     {
       id: 3,
-      image: "/src/assets/image/banner5.webp",
+      image: banner3,
     },
     {
       id: 4,
-      image: "/src/assets/image/banner4.webp",
+      image: banner4,
     },
   ];
 
