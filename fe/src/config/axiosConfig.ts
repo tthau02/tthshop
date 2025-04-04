@@ -1,10 +1,9 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000", // Giá trị mặc định nếu không có VITE_API_URL
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Interceptor để xử lý token và header
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -15,12 +14,11 @@ instance.interceptors.request.use(
     ) {
       config.headers.Authorization = `Bearer ${token}`;
     } else {
-      delete config.headers.Authorization; // Xóa Authorization nếu không có token hoặc là endpoint auth
+      delete config.headers.Authorization;
     }
 
-    // Xử lý Content-Type cho FormData
     if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"]; // Để browser tự đặt Content-Type cho FormData
+      delete config.headers["Content-Type"];
     } else {
       config.headers["Content-Type"] = "application/json";
     }
@@ -30,7 +28,6 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor cho response (tuỳ chọn, để xử lý lỗi tập trung)
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
