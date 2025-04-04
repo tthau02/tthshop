@@ -8,9 +8,6 @@ import {
   updateCategory,
 } from "../controllers/category";
 import upload from "../middlewares/upload";
-import multer from "multer";
-
-const upload = multer({ dest: "uploads/" });
 
 const router = Router();
 
@@ -20,4 +17,5 @@ router.post("/categores", upload.single("image"), createCategory);
 router.get("/categores", getCategoryName);
 router.delete("/categores/:id", removeCate);
 router.get("/categores/:id", getByid);
+
 export default router;
