@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { FaEye, FaEdit, FaFilter } from "react-icons/fa";
-import axios from "axios";
 import toast from "react-hot-toast";
 import UpdateOrderStatusModal from "./UpdateOrderStatusModal";
 import OrderDetailModal from "./OrderDetailModal";
 import { Order, Pagination } from "../../../interfaces/order"; // Điều chỉnh đường dẫn
+import instance from "../../../config/axiosConfig";
 
 const OrdersContent = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -27,7 +27,7 @@ const OrdersContent = () => {
   const fetchOrders = async (status: string, page: number) => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/api/orders", {
+      const response = await instance.get("/orders", {
         params: {
           status: status === "all" ? undefined : status,
           page,
@@ -49,9 +49,7 @@ const OrdersContent = () => {
 
   const fetchOrderDetail = async (orderId: string) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/orders/${orderId}`
-      );
+      const response = await instance.get(`/orders/${orderId}`);
       const { order } = response.data;
       setSelectedOrderDetail(order);
       setIsDetailModalOpen(true);
